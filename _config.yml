@@ -1,10 +1,10 @@
 # --- Required options --- #
 
 # Name of website
-title: My Website
+title: NeuralFlux
 
 # Your name to show in the footer
-author: Some Person
+author: NeuralFlux
 
 # --- List of links in the navigation bar --- #
 
@@ -34,12 +34,10 @@ round-avatar: true
 # Select the social network links that you want to show in the footer.
 # Uncomment the links you want to show and add your information to each one.
 social-network-links:
-  email: "someone@example.com"
-  facebook: deanattali
-  github: daattali
-  twitter: daattali
+  email: "anudeep.tumati99@gmail.com"
+  github: NeuralFlux
 #  reddit: yourname
-#  linkedin: daattali
+  linkedin: anudeep-tubati
 #  xing: yourname
 #  stackoverflow: "3943160/daattali"
 #  snapchat: deanat78
@@ -64,10 +62,10 @@ rss-description: This website is a virtual proof that I'm awesome
 
 # Select which social network share links to show in posts
 share-links-active:
-  twitter: true
-  facebook: true
+  twitter: false
+  facebook: false
   linkedin: true
-  vk: false
+  email: true
 
 # How to display the link to your website in the footer
 # Remove this if you don't want a link in the footer
@@ -173,7 +171,7 @@ date_format: "%B %-d, %Y"
 # --- You don't need to touch anything below here (but you can if you want) --- #
 
 # Output options (more information on Jekyll's site)
-timezone: "America/Toronto"
+timezone: "Asia/Kolkata"
 markdown: kramdown
 highlighter: rouge
 permalink: /:year-:month-:day-:title/
@@ -190,9 +188,9 @@ defaults:
       type: "posts"
     values:
       layout: "post"
-      comments: true  # add comments to all blog posts
+      comments: false  # add comments to all blog posts
       social-share: true # add social media sharing buttons to all blog posts
-      readtime: false # add estimated reading time on all blog posts
+      readtime: true # add estimated reading time on all blog posts
   -
     scope:
       path: "" # all files
