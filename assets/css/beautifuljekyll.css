@@ -629,6 +629,26 @@ footer .footer-custom-content {
 .intro-header.big-img .post-heading .post-subheading {
   font-weight: 400;
 }
+
+/* custom css - NeuralFlux*/
+.intro-header .page-heading .page-intropara,
+.intro-header .post-heading .post-intropara {
+  font-size: 1.2rem;
+  line-height: 1;
+  display: block;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 250;
+  margin: 0.7rem 0 0;
+}
+.intro-header .post-heading .post-intropara {
+  margin-bottom: 0.75rem;
+}
+.intro-header.big-img .page-heading .page-intropara,
+.intro-header.big-img .post-heading .post-intropara {
+  font-weight: 300;
+}
+/* custom css - NeuralFlux*/
+
 .intro-header.big-img .page-heading hr {
   box-shadow: 1px 1px 3px #000;
   -webkit-box-shadow: 1px 1px 3px #000;
