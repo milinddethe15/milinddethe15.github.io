@@ -17,7 +17,7 @@ Favorite quotes? I usually love a lot of quotes, have a whole collection of 'em.
 > We accept the love we think we deserve. &mdash; Stephen Chbosky, [The Perks of Being a Wallflower](https://www.imdb.com/title/tt1659337/)
 
 ### <a name="why-do-i-write">Why do I write? </a>
-There's no denying that right now, in the world, there's so much stress, depression, existential crisis and what not. I hope to reduce that, by even a teeny tiny bit if at all, with my writing. I love the concept of sharing. I want to share whatever small things I learn with everyone. I don't really know if they'll work for you or not, but I'll definitely share stuff which has worked for me. So I guess it's worth a shot.
+There's no denying that right now, in the world, there's so much stress, depression, existential crisis and what not. I hope to reduce that, by even a teeny tiny bit if at all, with my writing. I love the concept of sharing. I want to share whatever small things I learn with everyone. I don't really know if they'll work for you, but I'll definitely share stuff which has worked for me. So I guess it's worth a shot.
 
 ### The End
 (of my brain power for a while)
