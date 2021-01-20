@@ -7,8 +7,6 @@ subtitle: Ahem ahem, want to write my biography?
 
 I'm Anudeep Tubati (yes, this is the last time I'm telling my name, promise) and I'm currently a CS Senior at [IIT Dharwad](https://iitdh.ac.in/), India (if I'm not there by the time you're reading this, I've clearly procrastinated blogging, yet again &#128532;).
 
-**Warning**: If you are a person who gets irritated by fine grammatical errors, **Do Not** read my blog as I use some colloquial stuff here and there xP
-
 Oh, you're still reading? Thenks for showing so much interest\
 For starters, I'm from Hyderabad, Telangana, India (the [best city](https://www.thehansindia.com/telangana/hyderabad-ranks-best-city-to-live-in-india-for-fifth-time-in-a-row-511940) in India, duh).
 
