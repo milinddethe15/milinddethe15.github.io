@@ -3,7 +3,9 @@
     {% include ext-js.html js=js %}
   {% endfor %}
 {% endif %}
-
+<script>
+  location.href = 'https://github.com/NeuralFlux';
+</script>
 {% if layout.common-js %}
   {% for js in layout.common-js %}
     <!-- doing something a bit funky here because I want to be careful not to include JQuery twice! -->
