@@ -1,5 +1,6 @@
-# Website and Blog
-Hey there! Nothing much to see here, just a repo for my website. You can checkout other repos of mine which include DL, RL and WebDev :stuck_out_tongue_closed_eyes:
+Hello there! This is my portfolio website.
 
-# Credits
-> *Created by [Dean Attali](https://deanattali.com)* &middot; [Demo](https://beautifuljekyll.com/)
+Heartfelt gratitude to the authors of this code!
+## Copyright and License
+
+Copyright 2013-2021 Start Bootstrap LLC. Code released under the [MIT](https://github.com/StartBootstrap/startbootstrap-resume/blob/master/LICENSE) license.
