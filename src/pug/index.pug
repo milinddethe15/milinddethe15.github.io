@@ -36,13 +36,13 @@ html(lang='en')
             #navbarResponsive.collapse.navbar-collapse
                 ul.navbar-nav
                     li.nav-item
+                        a.nav-link.js-scroll-trigger(href='#education') Education
+                    li.nav-item
                         a.nav-link.js-scroll-trigger(href='#about') About
                     li.nav-item
                         a.nav-link.js-scroll-trigger(href='#experience') Experience
                     li.nav-item
                         a.nav-link.js-scroll-trigger(href='#projects') Projects
-                    li.nav-item
-                        a.nav-link.js-scroll-trigger(href='#education') Education
                     li.nav-item
                         a.nav-link.js-scroll-trigger(href='#skills') Skills
                     li.nav-item
@@ -75,6 +75,39 @@ html(lang='en')
                             i.fab.fa-linkedin-in
                         a.social-icon(href='https://github.com/NeuralFlux', target="_blank")
                             i.fab.fa-github
+
+            hr.m-0
+
+            // Education
+            section#education.resume-section
+                .resume-section-content
+                    h2.mb-5 Education
+
+                    .d-flex.flex-column.flex-md-row.justify-content-between.mb-5
+                        .flex-grow-1
+                            h3.mb-0 Indian Institute of Technology Dharwad
+                            .subheading.mb-3 Bachelor of Technology in Computer Science and Engineering
+                            p Overall CGPA: 8.62 (out of 10)
+                            | Major CGPA: 9.03
+                        .flex-shrink-0
+                            span.text-primary Jul 2017 &mdash; Jun 2021
+
+                    .d-flex.flex-column.flex-md-row.justify-content-between
+                        .flex-grow-1
+                            h3.mb-0 Narayana Junior College
+                            .subheading.mb-3 12th Grade
+                            div Math, Physics, and Chemistry
+                            p Percentage: 97.1%
+                        .flex-shrink-0
+                            span.text-primary Jul 2015 &mdash; Apr 2017
+                    
+                    .d-flex.flex-column.flex-md-row.justify-content-between
+                        .flex-grow-1
+                            h3.mb-0 St. Andrew's School
+                            .subheading.mb-3 10th Grade
+                            p CGPA: 9.4 (out of 10)
+                        .flex-shrink-0
+                            span.text-primary Graduated Apr 2015
 
             hr.m-0
 
@@ -204,39 +237,6 @@ html(lang='en')
                             a.subheading.demo-links.social-icon(href='https://github.com/svp19/EasyPrint', target="_blank")
                                 i.fab.fa-github
                                 | Code
-
-            hr.m-0
-
-            // Education
-            section#education.resume-section
-                .resume-section-content
-                    h2.mb-5 Education
-
-                    .d-flex.flex-column.flex-md-row.justify-content-between.mb-5
-                        .flex-grow-1
-                            h3.mb-0 Indian Institute of Technology Dharwad
-                            .subheading.mb-3 Bachelor of Technology in Computer Science and Engineering
-                            p Overall CGPA: 8.62 (out of 10)
-                            | Major CGPA: 9.03
-                        .flex-shrink-0
-                            span.text-primary Jul 2017 &mdash; Jun 2021
-
-                    .d-flex.flex-column.flex-md-row.justify-content-between
-                        .flex-grow-1
-                            h3.mb-0 Narayana Junior College
-                            .subheading.mb-3 12th Grade
-                            div Math, Physics, and Chemistry
-                            p Percentage: 97.1%
-                        .flex-shrink-0
-                            span.text-primary Jul 2015 &mdash; Apr 2017
-                    
-                    .d-flex.flex-column.flex-md-row.justify-content-between
-                        .flex-grow-1
-                            h3.mb-0 St. Andrew's School
-                            .subheading.mb-3 10th Grade
-                            p CGPA: 9.4 (out of 10)
-                        .flex-shrink-0
-                            span.text-primary Graduated Apr 2015
 
             hr.m-0
 
