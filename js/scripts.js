@@ -1,3 +1,8 @@
+/*!
+* Start Bootstrap - Resume v7.0.4 (https://neuralflux.github.io/)
+* Copyright 2013-2024 Start Bootstrap
+* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-resume/blob/master/LICENSE)
+*/
 //
 // Scripts
 // 
