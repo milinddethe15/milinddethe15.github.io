@@ -1,16 +1,11 @@
-baseurl = "http://www.example.com"
+baseurl = "https://milinddethe15.github.io"
 title = "@milinddethe15"
 theme = "hugo-coder"
 languagecode = "en"
 defaultcontentlanguage = "en"
 
-
 [pagination]
 pagerSize = 20
-
-[services]
-[services.disqus]
-shortname = "milinddethe15"
 
 [markup.highlight]
 style = "github-dark"
@@ -23,9 +18,9 @@ style = "github-dark"
   avatarurl = "/images/profile_whitebg.png"
   #gravatar = "milinddethe15@gmail.com"
 
-  faviconSVG = "/img/favicon.svg"
-  favicon_32 = "/img/favicon-32x32.png"
-  favicon_16 = "/img/favicon-16x16.png"
+  faviconSVG = "/images/favicon.svg"
+  favicon_32 = "/images/favicon-32x32.png"
+  favicon_16 = "/images/favicon-16x16.png"
 
   since = 2025
 
@@ -96,3 +91,7 @@ style = "github-dark"
   name = "About Me"
   weight = 3
   url = "about/"
+
+# If you want to use Cloudflare Web Analytics(https://cloudflare.com) for analytics, add this section
+[params.cloudflare]
+token = "06221de30e1e4ec2870a1f8dc46d48ed"
