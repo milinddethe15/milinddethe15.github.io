@@ -1,13 +1,23 @@
-// Three.js
+// Bundled JS file is used instead of this. 
+import {
+  Scene,
+  PerspectiveCamera,
+  WebGLRenderer,
+  BufferGeometry,
+  Float32BufferAttribute,
+  PointsMaterial,
+  Points,
+} from "three";
+
 document.addEventListener("DOMContentLoaded", function () {
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(
+  const scene = new Scene();
+  const camera = new PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
     0.1,
     1000
   );
-  const renderer = new THREE.WebGLRenderer({ alpha: true });
+  const renderer = new WebGLRenderer({ alpha: true });
   
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.domElement.style.position = "fixed";
@@ -17,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.body.appendChild(renderer.domElement);
 
   function createStars() {
-    const starGeometry = new THREE.BufferGeometry();
+    const starGeometry = new BufferGeometry();
     const starVertices = [];
     
     for (let i = 0; i < 1000; i++) {
@@ -29,17 +39,17 @@ document.addEventListener("DOMContentLoaded", function () {
     
     starGeometry.setAttribute(
       "position",
-      new THREE.Float32BufferAttribute(starVertices, 3)
+      new Float32BufferAttribute(starVertices, 3)
     );
     
-    const starMaterial = new THREE.PointsMaterial({
+    const starMaterial = new PointsMaterial({
       color: 0xffffff,
       size: 0.015,
       transparent: true,
       opacity: 0.3,
     });
     
-    const stars = new THREE.Points(starGeometry, starMaterial);
+    const stars = new Points(starGeometry, starMaterial);
     scene.add(stars);
     return stars;
   }

@@ -1,4 +1,1 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-{{ $script := resources.Get "js/custom.js" }}
-<script src="{{ $script.RelPermalink }}" defer></script>
+<script type="module" src="{{ "js/bundle.js" | relURL }}" defer></script>
