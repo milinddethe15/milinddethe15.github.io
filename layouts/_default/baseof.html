@@ -48,10 +48,10 @@
   {{ range .Site.Params.customJS }}
   {{ if hugo.IsServer }}
   {{ $script := resources.Get . }}
-  <script src="{{ $script.RelPermalink }}"></script>
+  <script defer src="{{ $script.RelPermalink }}"></script>
   {{ else }}
-  {{ $script := resources.Get . | minify | fingerprint }}
-  <script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+  {{ $script := resources.Get . | js.Build | minify | fingerprint }}
+  <script defer src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
   {{ end }}
   {{ end }}
 
@@ -133,5 +133,7 @@
   {{ end }}
 
   {{- partial "body/extensions" . -}}
+  {{ $js := resources.Get "js/threejs.js" | js.Build | resources.Minify | resources.Fingerprint }}
+  <script defer src="{{ $js.RelPermalink }}"></script>
 </body>
 </html>
