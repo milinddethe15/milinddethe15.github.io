@@ -17,7 +17,7 @@ style = "github-dark"
   keywords = "blog,developer,personal"
   avatarurl = "/images/profile_whitebg.png"
   #gravatar = "milinddethe15@gmail.com"
-
+  githubUsername = "milinddethe15"
   faviconSVG = "/images/favicon.svg"
   favicon_32 = "/images/favicon-32x32.png"
   favicon_16 = "/images/favicon-16x16.png"
@@ -30,9 +30,9 @@ style = "github-dark"
   colorScheme = "dark"
   hidecolorschemetoggle = true
 
-  # customCSS = ["css/custom.css"]
+  # customCSS = ["css/github-activity.css","css/github-activity.dark.css"]
   # customSCSS = ["scss/custom.scss"]
-  # customJS = ["js/custom.js"]
+  customJS = ["js/github-activity.min.js","js/mustache.min.js"]
 
 [taxonomies]
   category = "categories"
@@ -89,6 +89,10 @@ style = "github-dark"
   weight = 2
   url = "https://drive.google.com/file/d/1BbZS8mHuxcgBiR5ZlOw5_cPORrJ6X3wj/view?usp=sharing"
 [[menu.main]]
-  name = "About Me"
+  name = "Activity"
   weight = 3
+  url = "activity/"
+[[menu.main]]
+  name = "About Me"
+  weight = 4
   url = "about/"

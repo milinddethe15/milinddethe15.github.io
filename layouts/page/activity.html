@@ -1,0 +1,43 @@
+{{ define "title" }}
+  {{ .Title }} · {{ .Site.Title }}
+{{ end }}
+{{ define "content" }}
+  <section class="container activity">
+    <article>
+      <header>
+        <div class="activity-title">
+          <h1 class="title">
+            <a class="title-link" href="{{ .Permalink | safeURL }}">
+              {{ .Title }}
+            </a>
+          </h1>
+        </div>
+      </header>
+
+      <div class="activity-content">
+        <div id="feed" data-github-username="{{ .Site.Params.githubUsername }}">
+          Loading GitHub activity...
+        </div>
+      </div>
+
+      <footer></footer>
+    </article>
+  </section>
+  <link rel="stylesheet" href="https://unpkg.com/octicons@4.4.0/build/font/octicons.css">
+  <link rel="stylesheet" href="https://unpkg.com/github-activity-feed@latest/dist/github-activity.min.css">
+  {{ $activityCSS := resources.Get "css/github-activity.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $activityCSS.RelPermalink }}">
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const feedElem = document.getElementById("feed");
+      const githubUsername = feedElem.getAttribute("data-github-username") || "your-default-username";
+      GitHubActivity.feed({
+        username: githubUsername,
+        // Optionally, specify a repository to filter by:
+        // repository: "your-repo",
+        selector: "#feed",
+        limit: 10
+      });
+    });
+  </script>
+{{ end }}
