@@ -32,7 +32,7 @@ style = "github-dark"
 
   # customCSS = ["css/github-activity.css","css/github-activity.dark.css"]
   # customSCSS = ["scss/custom.scss"]
-  customJS = ["js/github-activity.min.js","js/mustache.min.js"]
+  # customJS = ["js/github-activity.min.js","js/mustache.min.js"]
 
 [taxonomies]
   category = "categories"

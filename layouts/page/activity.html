@@ -27,6 +27,10 @@
   <link rel="stylesheet" href="https://unpkg.com/github-activity-feed@latest/dist/github-activity.min.css">
   {{ $activityCSS := resources.Get "css/github-activity.css" | minify | fingerprint }}
   <link rel="stylesheet" href="{{ $activityCSS.RelPermalink }}">
+  {{ $activityJS := resources.Get "js/github-activity.min.js" | minify | fingerprint }}
+  <script defer src="{{ $activityJS.RelPermalink }}" integrity="{{ $activityJS.Data.Integrity }}"></script>
+  {{ $activityJS := resources.Get "js/mustache.min.js" | minify | fingerprint }}
+  <script defer src="{{ $activityJS.RelPermalink }}" integrity="{{ $activityJS.Data.Integrity }}"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const feedElem = document.getElementById("feed");
