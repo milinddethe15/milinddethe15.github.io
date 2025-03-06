@@ -23,9 +23,9 @@
       <footer></footer>
     </article>
   </section>
+  <link rel="stylesheet" href="https://unpkg.com/octicons@4.4.0/build/font/octicons.css">
+  <link rel="stylesheet" href="https://unpkg.com/github-activity-feed@latest/dist/github-activity.min.css">
   {{ $activityCSS := resources.Get "css/github-activity.css" | minify | fingerprint }}
-  <link rel="stylesheet" href="{{ $activityCSS.RelPermalink }}">
-  {{ $activityCSS := resources.Get "css/github-activity.dark.css" | minify | fingerprint }}
   <link rel="stylesheet" href="{{ $activityCSS.RelPermalink }}">
   <script>
     document.addEventListener("DOMContentLoaded", function () {
