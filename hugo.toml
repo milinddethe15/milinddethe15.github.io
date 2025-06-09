@@ -12,10 +12,14 @@ style = "github-dark"
 
 [params]
   author = "Milind Dethe"
-  info = "Software Developer | Engineering Student"
+  info = [
+    "Software Engineer Intern [@Atlan](https://atlan.com)",
+    "LFX'24 Mentee [@CNCF Thanos](https://thanos.io/)",
+    "Engineering Student [@IITKGP](https://www.iitkgp.ac.in/)"
+  ]
   description = "Milind Dethe's personal website"
   keywords = "blog,developer,personal"
-  avatarurl = "/images/profile_whitebg.png"
+  avatarurl = "/images/dp.jpg"
   #gravatar = "milinddethe15@gmail.com"
   githubUsername = "milinddethe15"
   faviconSVG = "/images/favicon.svg"
@@ -23,12 +27,13 @@ style = "github-dark"
   favicon_16 = "/images/favicon-16x16.png"
 
   since = 2025
+  disableFooter = true
   
-  disableDefaultJsScripts = true
+  disableDefaultJsScripts = false
   enableTwemoji = true
 
-  colorScheme = "dark"
-  hidecolorschemetoggle = true
+  colorScheme = "auto"
+  hidecolorschemetoggle = false
 
   # customCSS = ["css/github-activity.css","css/github-activity.dark.css"]
   # customSCSS = ["scss/custom.scss"]

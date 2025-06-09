@@ -33,12 +33,25 @@ document.addEventListener("DOMContentLoaded", function () {
       new THREE.Float32BufferAttribute(starVertices, 3)
     );
     
+    // Determine initial theme based on body class
+    function isDarkTheme() {
+      return document.body.classList.contains('colorscheme-dark');
+    }
+
     const starMaterial = new THREE.PointsMaterial({
-      color: 0xffffff,
+      color: isDarkTheme() ? 0xffffff : 0x000000,
       size: 0.015,
       transparent: true,
-      opacity: 0.35,
+      opacity: isDarkTheme() ? 0.35 : 0.4,
     });
+
+    // Observe class changes on <body> to react to theme toggling
+    const observer = new MutationObserver(() => {
+      const dark = isDarkTheme();
+      starMaterial.color.setHex(dark ? 0xffffff : 0x000000);
+      starMaterial.opacity = dark ? 0.35 : 0.4;
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
     
     const stars = new THREE.Points(starGeometry, starMaterial);
     scene.add(stars);
