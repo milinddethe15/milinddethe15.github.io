@@ -1,0 +1,136 @@
+{{ define "title" }}
+  {{- printf "%s · %s" .Title .Site.Title -}}
+{{ end }}
+
+{{ define "content" }}
+  <section class="container page notes-page">
+    <article>
+      <header class="page-header">
+        <h1 class="page-title">{{ .Title }}</h1>
+        {{ with .Content }}
+          <div class="page-subtitle">
+            {{ . }}
+          </div>
+        {{ end }}
+      </header>
+
+      <style>
+        .notes-page__intro {
+          margin: 1.5rem 0 0;
+          font-size: 1.05rem;
+          opacity: 0.9;
+        }
+        .notes-page__grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+          gap: 1.25rem;
+          margin: 2rem 0 0;
+        }
+        .notes-card {
+          border: 1px solid var(--accent, currentColor);
+          border-radius: 14px;
+          padding: 1.5rem;
+          text-decoration: none;
+          color: inherit;
+          background: rgba(255, 255, 255, 0.02);
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+          transition: transform 0.2s ease, border-color 0.2s ease,
+            background 0.2s ease;
+        }
+        .notes-card:hover,
+        .notes-card:focus {
+          border-color: var(--accent, currentColor);
+          background: rgba(255, 255, 255, 0.05);
+          transform: translateY(-4px);
+        }
+        .notes-card__title {
+          margin: 0;
+          font-size: 1.2rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .notes-card__badge {
+          font-size: 0.85rem;
+          border-radius: 999px;
+          padding: 0.15rem 0.75rem;
+          border: 1px solid currentColor;
+          opacity: 0.8;
+        }
+        .notes-card__meta {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 0.9rem;
+          opacity: 0.8;
+        }
+        .notes-card__cta {
+          margin-top: 0.25rem;
+          font-size: 0.85rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          opacity: 0.6;
+        }
+        .notes-page__empty {
+          font-style: italic;
+          opacity: 0.8;
+          margin-top: 1.5rem;
+        }
+      </style>
+
+      {{ $notesRoot := "notes-hub" }}
+      {{ if not (fileExists $notesRoot) }}
+        <p class="notes-page__empty">
+          Notes repository not found. Run <code>git submodule update --init --recursive</code> to sync it locally.
+        </p>
+      {{ else }}
+        {{ $sections := where .Pages "Params.notes_dir" "!=" "" }}
+        {{ if gt (len $sections) 0 }}
+          <p class="notes-page__intro">
+            Each directory in <code>notes-hub</code> becomes a dedicated page. Note
+            counts update automatically—keep everything in Markdown and Hugo will
+            handle the rest.
+          </p>
+          <div class="notes-page__grid">
+            {{ range sort $sections "Title" }}
+              {{ $dirPath := printf "%s/%s" $notesRoot .Params.notes_dir }}
+              {{ $count := 0 }}
+              {{ if fileExists $dirPath }}
+                {{ range readDir $dirPath }}
+                  {{ if and (not .IsDir) (strings.HasSuffix .Name ".md") }}
+                    {{ $count = add $count 1 }}
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+              <a class="notes-card" href="{{ .RelPermalink }}">
+                <h2 class="notes-card__title">
+                  {{ .Title }}
+                  <span class="notes-card__badge">
+                    {{ if gt $count 0 }}
+                      {{ printf "%d %s" $count (cond (eq $count 1) "note" "notes") }}
+                    {{ else }}
+                      empty
+                    {{ end }}
+                  </span>
+                </h2>
+                <div class="notes-card__meta">
+                  <span>Click to browse all notes inside</span>
+                  <span aria-hidden="true">→</span>
+                </div>
+                <span class="notes-card__cta">Open directory</span>
+              </a>
+            {{ end }}
+          </div>
+        {{ else }}
+          <p class="notes-page__empty">
+            No note pages found. Run <code>npm run sync:notes</code> to generate per-directory pages.
+          </p>
+        {{ end }}
+      {{ end }}
+    </article>
+  </section>
+{{ end }}
+

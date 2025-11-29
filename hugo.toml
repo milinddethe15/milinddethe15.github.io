@@ -101,6 +101,10 @@ style = "github-dark"
   name = "About Me"
   weight = 4
   url = "about/"
+[[menu.main]]
+  name = "Notes"
+  weight = 5
+  url  = "notes/"
 
 # If you want to use Cloudflare Web Analytics(https://cloudflare.com) for analytics, add this section
 [params.cloudflare]

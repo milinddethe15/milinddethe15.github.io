@@ -1,0 +1,214 @@
+{{ define "title" }}
+  {{- printf "%s · %s" .Title .Site.Title -}}
+{{ end }}
+
+{{ define "content" }}
+  <section class="container page notes-page">
+    <article>
+      <header class="page-header">
+        <p class="page-subtitle">
+          <a href="{{ "/notes/" | relLangURL }}">← All directories</a>
+        </p>
+        <h1 class="page-title">{{ .Title }}</h1>
+        {{ with .Params.description }}
+          <p class="page-subtitle">{{ . }}</p>
+        {{ end }}
+      </header>
+
+      <style>
+        .notes-page__toc {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem 1rem;
+          margin: 1.5rem 0 2rem;
+          padding: 1rem;
+          border: 1px dashed currentColor;
+          border-radius: 10px;
+          font-size: 0.9rem;
+          opacity: 0.9;
+        }
+        .notes-page__toc-title {
+          font-weight: 600;
+          margin-right: 0.5rem;
+        }
+        .notes-page__toc a {
+          text-decoration: none;
+          border-bottom: 1px solid transparent;
+        }
+        .notes-page__toc a:hover,
+        .notes-page__toc a:focus {
+          border-color: currentColor;
+        }
+        .note-entry {
+          border: 1px solid var(--accent, currentColor);
+          border-radius: 10px;
+          margin: 1rem 0;
+          padding: 0 1.25rem 1.25rem;
+          background: rgba(255, 255, 255, 0.02);
+        }
+        .note-entry summary {
+          cursor: pointer;
+          font-weight: 600;
+          padding: 1rem 0;
+          list-style: none;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 0.75rem;
+        }
+        .note-entry summary::-webkit-details-marker {
+          display: none;
+        }
+        .note-entry__meta {
+          font-size: 0.85rem;
+          opacity: 0.65;
+          white-space: nowrap;
+        }
+        .note-body {
+          padding-top: 0.5rem;
+          line-height: 1.7;
+        }
+        .excalidraw-section {
+          margin-top: 2.5rem;
+        }
+        .excalidraw-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+          gap: 1.25rem;
+          margin-top: 1.25rem;
+        }
+        .excalidraw-figure {
+          border: 1px solid var(--accent, currentColor);
+          border-radius: 12px;
+          padding: 1rem;
+          background: rgba(255, 255, 255, 0.02);
+        }
+        .excalidraw-figure img {
+          width: 100%;
+          height: auto;
+          border-radius: 8px;
+          background: #fff;
+        }
+        .excalidraw-figure figcaption {
+          margin-top: 0.75rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 0.75rem;
+          font-size: 0.85rem;
+        }
+        .excalidraw-download {
+          text-decoration: none;
+          font-weight: 600;
+          letter-spacing: 0.03em;
+        }
+        .notes-page__empty {
+          font-style: italic;
+          opacity: 0.8;
+          margin-top: 1rem;
+        }
+      </style>
+
+      {{ $dirParam := .Params.notes_dir }}
+      {{ if not $dirParam }}
+        <p class="notes-page__empty">
+          This page is missing the <code>notes_dir</code> parameter.
+        </p>
+      {{ else }}
+        {{ $notesRoot := "notes-hub" }}
+        {{ $dirPath := printf "%s/%s" $notesRoot $dirParam }}
+        {{ if not (fileExists $dirPath) }}
+          <p class="notes-page__empty">
+            Directory <code>{{ $dirParam }}</code> not found inside <code>{{ $notesRoot }}</code>.
+          </p>
+        {{ else }}
+          {{ $files := readDir $dirPath }}
+          {{ $notes := slice }}
+          {{ $drawings := slice }}
+          {{ $missing := slice }}
+
+          {{ range $files }}
+            {{ if .IsDir }}
+              {{ continue }}
+            {{ end }}
+
+            {{ $filePath := printf "%s/%s/%s" $notesRoot $dirParam .Name }}
+            {{ if strings.HasSuffix .Name ".md" }}
+              {{ $raw := readFile $filePath }}
+              {{ $noteTitle := humanize (replaceRE "\\.md$" "" .Name) }}
+              {{ $anchor := anchorize $noteTitle }}
+              {{ $notes = $notes | append (dict "title" $noteTitle "raw" $raw "anchor" $anchor "path" $filePath) }}
+            {{ else if or (strings.HasSuffix .Name ".excalidraw") (strings.HasSuffix .Name ".excalidraw.json") }}
+              {{ $svgRelative := printf "excalidraw/%s/%s" $dirParam (replaceRE "\\.excalidraw(\\.json)?$" ".svg" .Name) }}
+              {{ $svgAbsolute := printf "static/%s" $svgRelative }}
+              {{ if fileExists $svgAbsolute }}
+                {{ $title := humanize (replaceRE "\\.excalidraw(\\.json)?$" "" .Name) }}
+                {{ $anchor := anchorize (printf "%s-figure" $title) }}
+                {{ $drawings = $drawings | append (dict "title" $title "anchor" $anchor "rel" $svgRelative "source" (printf "%s/%s" $dirParam .Name)) }}
+              {{ else }}
+                {{ $missing = $missing | append .Name }}
+              {{ end }}
+            {{ end }}
+          {{ end }}
+
+          {{ if gt (len $notes) 0 }}
+            {{ $sorted := sort $notes "title" }}
+            {{ if gt (len $sorted) 1 }}
+              <nav class="notes-page__toc">
+                <span class="notes-page__toc-title">Jump to:</span>
+                {{ range $sorted }}
+                  <a href="#{{ .anchor }}">{{ .title }}</a>
+                {{ end }}
+              </nav>
+            {{ end }}
+
+            {{ range $index, $note := $sorted }}
+              {{ $wordCount := countwords $note.raw }}
+              <details class="note-entry" id="{{ $note.anchor }}" {{ if eq $index 0 }}open{{ end }}>
+                <summary>
+                  <span>{{ $note.title }}</span>
+                  <span class="note-entry__meta">
+                    {{ printf "%d words" $wordCount }}
+                  </span>
+                </summary>
+                <div class="note-body">
+                  {{ $note.raw | markdownify }}
+                </div>
+              </details>
+            {{ end }}
+          {{ else if eq (len $drawings) 0 }}
+            <p class="notes-page__empty">
+              No Markdown files were found inside <code>{{ $dirParam }}</code>.
+            </p>
+          {{ end }}
+
+          {{ if gt (len $drawings) 0 }}
+            <section class="excalidraw-section">
+              <h2>Diagrams</h2>
+              <div class="excalidraw-grid">
+                {{ range sort $drawings "title" }}
+                  <figure class="excalidraw-figure" id="{{ .anchor }}">
+                    <img src="/{{ .rel }}" alt="Excalidraw diagram for {{ .title }}" loading="lazy" decoding="async" />
+                    <figcaption>
+                      <span>{{ .title }}</span>
+                      <a class="excalidraw-download" href="/notes-hub/{{ .source }}" download>
+                        .excalidraw
+                      </a>
+                    </figcaption>
+                  </figure>
+                {{ end }}
+              </div>
+            </section>
+          {{ end }}
+
+          {{ if gt (len $missing) 0 }}
+            <p class="notes-page__empty">
+              {{ len $missing }} diagram(s) need rendering. Run <code>npm run render:excalidraw</code> to generate the SVG exports.
+            </p>
+          {{ end }}
+        {{ end }}
+      {{ end }}
+    </article>
+  </section>
+{{ end }}
+

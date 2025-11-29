@@ -1,3 +1,6 @@
 [submodule "themes/hugo-coder"]
 	path = themes/hugo-coder
 	url = https://github.com/luizdepra/hugo-coder.git
+[submodule "notes-hub"]
+	path = notes-hub
+	url = https://github.com/milinddethe15/notes-hub.git

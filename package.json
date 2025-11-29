@@ -1,5 +1,12 @@
 {
+  "scripts": {
+    "sync:notes": "node scripts/sync-notes-pages.js",
+    "render:excalidraw": "node scripts/render-excalidraw.mjs",
+    "prepare:notes": "npm run sync:notes && npm run render:excalidraw"
+  },
   "dependencies": {
+    "@excalidraw/excalidraw": "^0.18.0",
+    "jsdom": "^27.2.0",
     "three": "^0.174.0"
   }
 }
