@@ -13,7 +13,8 @@ style = "github-dark"
 [params]
   author = "Milind Dethe"
   info = [
-    "Software Engineer Intern [@Atlan](https://atlan.com)",
+    "Platform / SRE Engineer",
+    "Former Software Engineer Intern [@Atlan](https://atlan.com)",
     "LFX'24 Mentee [@CNCF Thanos](https://thanos.io/)",
     "Engineering Student [@IITKGP](https://www.iitkgp.ac.in/)"
   ]
