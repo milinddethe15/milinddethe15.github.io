@@ -19,3 +19,8 @@ git submodule update --init --recursive
 ```sh
 hugo serve
 ```
+
+4. To push `public/` to s3:
+```sh
+aws s3 sync public/ s3://milinddethe15-portfolio
+```
