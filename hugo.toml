@@ -1,4 +1,4 @@
-baseurl = "https://milinddethe15.github.io"
+baseurl = "https://milinddethe15.tech"
 title = "@milinddethe15"
 theme = "hugo-coder"
 languagecode = "en"
@@ -13,8 +13,8 @@ style = "github-dark"
 [params]
   author = "Milind Dethe"
   info = [
-    "Platform / SRE Engineer",
-    "Former Software Engineer Intern [@Atlan](https://atlan.com)",
+    "Software Engineer",
+    "Ex-Intern [@Atlan](https://atlan.com)",
     "LFX'24 Mentee [@CNCF Thanos](https://thanos.io/)",
     "Engineering Student [@IITKGP](https://www.iitkgp.ac.in/)"
   ]
