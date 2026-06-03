@@ -133,7 +133,5 @@
   {{ end }}
 
   {{- partial "body/extensions" . -}}
-  {{ $js := resources.Get "js/threejs.js" | js.Build | resources.Minify | resources.Fingerprint }}
-  <script defer src="{{ $js.RelPermalink }}"></script>
 </body>
 </html>

@@ -3,3 +3,6 @@
 
   You can add further theme extensions or customizations here if needed.
 */}}
+{{ $js := resources.Get "js/threejs.js" | js.Build | resources.Minify | resources.Fingerprint }}
+<script defer src="{{ $js.RelPermalink }}"></script>
+

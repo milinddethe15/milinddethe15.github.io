@@ -1,0 +1,13 @@
+// Make body background transparent so the Three.js canvas
+// (positioned fixed with z-index: -1) is visible behind the content.
+body {
+  background-color: transparent !important;
+}
+
+// Mobile navigation dropdown also needs a transparent background
+// so stars show through on small screens.
+.navigation .navigation-list {
+  @media only screen and (max-width: 768px) {
+    background-color: rgba(0, 0, 0, 0.85) !important;
+  }
+}
