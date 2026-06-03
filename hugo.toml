@@ -14,9 +14,9 @@ style = "github-dark"
   author = "Milind Dethe"
   info = [
     "Software Engineer",
-    "Ex-Intern [@Atlan](https://atlan.com)",
-    "LFX'24 Mentee [@CNCF Thanos](https://thanos.io/)",
-    "Engineering Student [@IITKGP](https://www.iitkgp.ac.in/)"
+    "Ex-[@Atlan](https://atlan.com)",
+    "LFX'24 [@CNCF Thanos](https://thanos.io/)",
+    "[IITKGP](https://www.iitkgp.ac.in/) '26"
   ]
   description = "Milind Dethe's personal website"
   keywords = "blog,developer,personal"
@@ -37,7 +37,7 @@ style = "github-dark"
   hidecolorschemetoggle = false
 
   # customCSS = ["css/github-activity.css","css/github-activity.dark.css"]
-  # customSCSS = ["scss/custom.scss"]
+  customSCSS = ["scss/custom.scss"]
   # customJS = ["js/github-activity.min.js","js/mustache.min.js"]
 
 [taxonomies]
@@ -65,18 +65,17 @@ style = "github-dark"
   weight = 3
   url = "https://www.linkedin.com/in/milind-dethe/"
 
+# [[params.social]]
+#   name = "Instagram"
+#   icon = "fa-brands fa-instagram fa-2x"
+#   weight = 8
+#   url = "https://www.instagram.com/milinddethe15/"
 
-[[params.social]]
-  name = "Instagram"
-  icon = "fa-brands fa-instagram fa-2x"
-  weight = 8
-  url = "https://www.instagram.com/milinddethe15/"
-
-[[params.social]]
-  name = "Discord"
-  icon = "fa-brands fa-discord fa-2x"
-  weight = 11
-  url = "https://discord.com/users/milinddethe"
+# [[params.social]]
+#   name = "Discord"
+#   icon = "fa-brands fa-discord fa-2x"
+#   weight = 11
+#   url = "https://discord.com/users/milinddethe"
 
 [[params.social]]
   name = "Email"
