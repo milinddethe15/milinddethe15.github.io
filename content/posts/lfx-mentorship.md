@@ -72,7 +72,7 @@ This mentorship taught me a lot, both technically and personally. Here are some 
     
     Looking back, I feel I should have asked more about their experiences in open-source and sought their advice for my future.
     
-    ![](/images/lfx-last-meet-pic.png)
+    ![](/images/lfx-last-meet-pic.jpg)
 
 * * *
 
