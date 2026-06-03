@@ -11,3 +11,9 @@ body {
     background-color: rgba(0, 0, 0, 0.85) !important;
   }
 }
+
+// Hide the external-link icon next to hyperlinks.
+a.external-link::after {
+  display: none !important;
+}
+
