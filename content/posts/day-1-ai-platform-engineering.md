@@ -1,7 +1,7 @@
 +++
 title = "Day 1: Why AI Workloads Are Different from Traditional Applications"
 date = "2026-06-04"
-description = "7"
+description = ""
 tags = [
     "7-days-of-ai-platform-engineering"
 ]
