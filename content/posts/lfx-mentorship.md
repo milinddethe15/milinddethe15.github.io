@@ -1,5 +1,4 @@
 +++
-authors = ["Milind Dethe"]
 title = "LFX Mentorship: My Experience as Mentee with CNCF Thanos"
 date = "2024-12-04"
 description = ""
