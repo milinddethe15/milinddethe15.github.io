@@ -1,7 +1,7 @@
 +++
 title = "Day 3: Why GPU Sharing Is Hard"
 date = "2026-06-06"
-description = ""
+description = "Why GPU utilization is hard: resource fragmentation, sharing strategies (MIG, time-slicing, batching), and cost impacts."
 tags = [
     "7-days-of-ai-platform-engineering"
 ]

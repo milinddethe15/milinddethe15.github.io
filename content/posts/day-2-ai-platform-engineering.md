@@ -1,7 +1,7 @@
 +++
 title = "Day 2: How Kubernetes Sees GPUs"
 date = "2026-06-05"
-description = ""
+description = "How Kubernetes discovers GPUs: drivers, device plugins, and making GPUs schedulable resources."
 tags = [
     "7-days-of-ai-platform-engineering"
 ]

@@ -1,7 +1,7 @@
 +++
 title = "Day 1: Why AI Workloads Are Different from Traditional Applications"
 date = "2026-06-04"
-description = ""
+description = "Why AI workloads demand different platform engineering: GPUs change bottlenecks and resource priorities."
 tags = [
     "7-days-of-ai-platform-engineering"
 ]
