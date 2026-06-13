@@ -161,6 +161,24 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px solid rgba(128, 128, 128, 0.12);
   }
 
+  // Figure + caption for Markdown images with alt text
+  figure.post-figure {
+    margin: 2rem 0;
+
+    img {
+      margin: 0;
+    }
+
+    figcaption.post-figcaption {
+      font-size: 1.4rem;
+      font-style: italic;
+      opacity: 0.55;
+      text-align: center;
+      margin-top: 0.6rem;
+      line-height: 1.5;
+    }
+  }
+
   // Tables
   table {
     width: 100%;
