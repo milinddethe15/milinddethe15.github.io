@@ -5,6 +5,7 @@ description = "Why vLLM exists: batching, PagedAttention, and efficient GPU memo
 tags = [
     "7-days-of-ai-platform-engineering"
 ]
+url = "/posts/day-6-ai-platform-engineering/"
 +++
 
 Over the last few days, I've learned how AI platforms manage GPUs:

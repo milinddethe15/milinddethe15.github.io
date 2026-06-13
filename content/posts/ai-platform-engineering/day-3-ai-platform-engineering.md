@@ -5,6 +5,7 @@ description = "Why GPU utilization is hard: resource fragmentation, sharing stra
 tags = [
     "7-days-of-ai-platform-engineering"
 ]
+url = "/posts/day-3-ai-platform-engineering/"
 +++
 
 In Day 2, I learned how Kubernetes discovers GPUs using Device Plugins.

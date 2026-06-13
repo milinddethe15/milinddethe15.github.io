@@ -5,6 +5,7 @@ description = "Why Ray exists: scheduling computation (tasks & actors) vs infras
 tags = [
     "7-days-of-ai-platform-engineering"
 ]
+url = "/posts/day-5-ai-platform-engineering/"
 +++
 
 Over the last few days, I've learned that AI infrastructure introduces challenges that traditional applications rarely face:

@@ -5,6 +5,7 @@ description = "Why AI workloads demand different platform engineering: GPUs chan
 tags = [
     "7-days-of-ai-platform-engineering"
 ]
+url = "/posts/day-1-ai-platform-engineering/"
 +++
 
 As someone who has spent most of my time with Kubernetes, observability, and platform engineering, I started my AI Platform Engineering journey with a simple question:

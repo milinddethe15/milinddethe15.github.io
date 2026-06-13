@@ -5,6 +5,7 @@ description = "A complete AI platform: layers, services, infrastructure, and whe
 tags = [
     "7-days-of-ai-platform-engineering"
 ]
+url = "/posts/day-7-ai-platform-engineering/"
 +++
 
 Over the last 6 days, I've learned about:

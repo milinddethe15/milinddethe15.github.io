@@ -5,6 +5,7 @@ description = "How Kubernetes discovers GPUs: drivers, device plugins, and makin
 tags = [
     "7-days-of-ai-platform-engineering"
 ]
+url = "/posts/day-2-ai-platform-engineering/"
 +++
 
 Yesterday I learned that AI infrastructure is fundamentally about managing expensive compute resources.

@@ -5,6 +5,7 @@ description = "Why AI scheduling differs from traditional apps: gang scheduling,
 tags = [
     "7-days-of-ai-platform-engineering"
 ]
+url = "/posts/day-4-ai-platform-engineering/"
 +++
 
 In Day 3, I learned that GPU utilization is one of the biggest challenges in AI infrastructure.
