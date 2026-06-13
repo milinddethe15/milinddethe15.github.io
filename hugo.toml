@@ -34,7 +34,7 @@ style = "github-dark"
   disableDefaultJsScripts = false
   enableTwemoji = true
 
-  colorScheme = "auto"
+  colorScheme = "dark"
   hidecolorschemetoggle = false
 
   # customCSS = ["css/github-activity.css","css/github-activity.dark.css"]
