@@ -334,29 +334,73 @@ body::before {
   }
 
   // Post list - super minimal
-  .list ul li {
-    padding: 1.5rem 0;
+  .list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .list ul li.post-list-item {
+    display: block !important;
+    padding: 1.6rem 0;
     margin-bottom: 0;
     border-bottom: 1px dashed transparent;
     transition: $theme-transition;
-    
+
     &:last-child {
-        border-bottom: none;
-    }
-    
-    .date {
-      font-family: $theme-body-font;
-      opacity: 0.5;
-      font-size: 1.4rem;
+      border-bottom: none;
     }
 
     .title {
+      display: block;
       font-family: $theme-body-font !important;
       font-size: 2rem !important;
       font-weight: 500;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
       text-transform: none;
+      line-height: 1.4;
+      margin-bottom: 0.4rem;
       transition: $theme-transition;
+      flex: unset !important;
+
+      &:hover, &:focus {
+        opacity: 0.6;
+      }
+    }
+
+    .post-list-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.3rem 0.5rem;
+
+      .date {
+        font-family: $theme-body-font;
+        font-size: 1.3rem;
+        opacity: 0.45;
+        white-space: nowrap;
+        display: inline !important;
+        width: auto !important;
+        text-align: left !important;
+        margin-right: 0 !important;
+      }
+
+      .sep {
+        font-size: 1.3rem;
+        opacity: 0.3;
+      }
+
+      .post-list-tag {
+        font-size: 1.2rem;
+        font-family: $theme-body-font;
+        opacity: 0.45;
+        text-decoration: none !important;
+        transition: $theme-transition;
+
+        &:hover {
+          opacity: 0.9;
+        }
+      }
     }
   }
 }
@@ -449,17 +493,17 @@ body {
     }
   }
 
-  .list ul li {
+  .list ul li.post-list-item {
     border-bottom-color: $theme-light-border;
 
     .title {
       color: $theme-light-fg !important;
       text-decoration: none !important;
       border-bottom: none !important;
-      
-      &:hover, &:focus {
-        opacity: 0.6;
-      }
+    }
+
+    .post-list-tag {
+      color: $theme-light-fg !important;
     }
   }
 
@@ -538,16 +582,16 @@ code {
       }
     }
 
-    .list ul li {
+    .list ul li.post-list-item {
       border-bottom-color: $theme-dark-border;
 
       .title {
         color: $theme-dark-fg !important;
         text-decoration: none !important;
+      }
 
-        &:hover, &:focus {
-          opacity: 0.6;
-        }
+      .post-list-tag {
+        color: $theme-dark-fg !important;
       }
     }
 
