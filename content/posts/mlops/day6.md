@@ -1,6 +1,6 @@
 +++
 title = "Day 6: Why Do Models Fail Even When Training Accuracy Looks Great?"
-date = "2026-06-15"
+date = "2026-06-18"
 description = "Learn about feature stores, training-serving skew, and why machine learning teams use platforms like Feast to keep training and production data consistent."
 tags = [
 "7-days-of-mlops"
