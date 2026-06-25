@@ -1,0 +1,22 @@
+// Override Font Awesome font-display to optional
+$fa-font-display: optional;
+
+// Import everything from the theme's coder.scss
+@import "css/normalize";
+@import "variables";
+@import "font-awesome/fontawesome";
+@import "font-awesome/regular";
+@import "font-awesome/solid";
+@import "font-awesome/brands";
+@import "font-awesome/v4-shims";
+@import "base";
+@import "content";
+@import "notices";
+@import "navigation";
+@import "pagination";
+@import "tabs";
+@import "taxonomies";
+@import "footer";
+@import "float";
+@import "mastodon";
+@import "syntax";
