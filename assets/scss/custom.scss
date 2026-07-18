@@ -209,22 +209,6 @@ a {
   text-decoration: none !important;
 }
 
-.skip-link {
-  position: absolute;
-  left: 1rem;
-  top: -4rem;
-  z-index: 9999;
-  padding: 0.8rem 1.2rem;
-  background: $theme-dark-fg;
-  color: $theme-dark-bg;
-  border-radius: 999px;
-  transition: top 0.2s ease;
-
-  &:focus {
-    top: 1rem;
-  }
-}
-
 // ── Halftone Overlay (very faint screentone effect) ────────────
 body::before {
   content: "";
