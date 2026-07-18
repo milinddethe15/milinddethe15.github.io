@@ -92,16 +92,20 @@ style = "github-dark"
   weight = 1
   url  = "posts/"
 [[menu.main]]
-  name = "Resume"
+  name = "Projects"
   weight = 2
+  url  = "projects/"
+[[menu.main]]
+  name = "Resume"
+  weight = 3
   url = "https://drive.google.com/file/d/1BbZS8mHuxcgBiR5ZlOw5_cPORrJ6X3wj/view?usp=sharing"
 [[menu.main]]
   name = "Activity"
-  weight = 3
+  weight = 4
   url = "activity/"
 [[menu.main]]
   name = "About Me"
-  weight = 4
+  weight = 5
   url = "about/"
 
 # If you want to use Cloudflare Web Analytics(https://cloudflare.com) for analytics, add this section
