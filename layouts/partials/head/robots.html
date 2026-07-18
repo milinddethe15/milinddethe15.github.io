@@ -1,0 +1,10 @@
+{{- $robots := .Params.robots -}}
+{{- if and (not $robots) .Params.noindex -}}
+  {{- $robots = "noindex,follow" -}}
+{{- end -}}
+{{- if and (not $robots) .Site.Params.robots -}}
+  {{- $robots = .Site.Params.robots -}}
+{{- end -}}
+{{- if $robots -}}
+<meta name="robots" content="{{ $robots }}">
+{{- end -}}
