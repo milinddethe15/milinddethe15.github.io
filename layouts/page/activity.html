@@ -16,7 +16,7 @@
 
       <div class="activity-content">
         <p>Recent public GitHub activity from <a href="https://github.com/{{ .Site.Params.githubUsername }}">@{{ .Site.Params.githubUsername }}</a>.</p>
-        <div id="feed" data-github-username="{{ .Site.Params.githubUsername }}">
+        <div id="feed" data-github-username="{{ .Site.Params.githubUsername }}" aria-live="polite" aria-busy="true">
           Loading GitHub activity...
         </div>
       </div>
@@ -43,6 +43,13 @@
         selector: "#feed",
         limit: 10
       });
+        const observer = new MutationObserver(function () {
+          if (feedElem.children.length > 0) {
+            feedElem.setAttribute("aria-busy", "false");
+            observer.disconnect();
+          }
+        });
+        observer.observe(feedElem, { childList: true, subtree: true });
     });
   </script>
 {{ end }}

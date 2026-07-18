@@ -14,8 +14,9 @@
 {{ end }}
 
 <body class="preload-transitions {{ $csClass }}{{ if .Site.Params.rtl }} rtl{{ end }}">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   {{ partial "float" . }}
-  <main class="wrapper">
+  <main class="wrapper" id="main-content">
     {{ partial "header.html" . }}
 
     <div class="content">
