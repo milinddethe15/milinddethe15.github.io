@@ -1,5 +1,62 @@
-+++
-title = "Projects"
-+++
-
-Selected work, experiments, and open-source contributions.
+---
+title: "Projects"
+description: "Selected work, experiments, and open-source contributions."
+projects:
+  - title: "Kubernetes-Native LLM Inference Platform"
+    description: "Built a production-style LLM inference platform with KServe, vLLM, llm-d, Envoy Gateway, Argo CD, and Helm, exploring scalable model serving, request routing, and GitOps workflows."
+    skills:
+      - "Kubernetes"
+      - "KServe"
+      - "vLLM"
+      - "Argo CD"
+      - "Helm"
+      - "LLMs"
+    sourceCode: "https://github.com/milinddethe15/llm-inference-platform"
+    image: "/images/llm-platform.png"
+  - title: "DeployGuard"
+    description: "A Kubernetes operator that analyzes Prometheus metrics during rollouts to automatically detect regressions and enable safer, metrics-driven deployments."
+    skills:
+      - "Go"
+      - "Kubernetes"
+      - "Prometheus"
+      - "Operator SDK"
+    sourceCode: "https://github.com/milinddethe15/deployguard"
+    image: "/gifs/deployguard.gif"
+  - title: "Predictive Kubernetes Autoscaler"
+    description: "An intelligent autoscaling system that forecasts workload demand and proactively scales Kubernetes applications using KEDA and time-series predictions."
+    skills:
+      - "KEDA"
+      - "Python"
+      - "FastAPI"
+      - "Kubernetes"
+      - "Prophet"
+    sourceCode: "https://github.com/milinddethe15/keda-ml-autoscaler"
+    image: "/images/autoscaler.png"
+  - title: "Multi-Tenant Store Provisioning Platform"
+    description: "Automated provisioning of isolated MedusaJS stores using Argo Workflows, enabling repeatable deployments with GitOps and cloud-native infrastructure."
+    skills:
+      - "Argo Workflows"
+      - "Kubernetes"
+      - "AWS"
+      - "Go"
+      - "GitOps"
+    sourceCode: "https://github.com/milinddethe15/store-provision-platform"
+    image: "/gifs/store-platform.gif"
+  - title: "AI Platform Engineering"
+    description: "A seven-day build log exploring GPU discovery, KV cache management, batching, and request routing for AI workloads."
+    skills:
+      - "Kubernetes"
+      - "GPU scheduling"
+      - "Go"
+      - "LLMs"
+    sourceCode: "https://milinddethe15.tech/tags/7-days-of-ai-platform-engineering/"
+    image: "/images/overview-ai-platform.webp"
+  - title: "MLOps Foundations"
+    description: "A practical walk-through of the MLOps lifecycle, from version control and training data to serving, monitoring, and iteration."
+    skills:
+      - "MLOps"
+      - "Model serving"
+      - "Experiment tracking"
+      - "Python"
+    sourceCode: "https://milinddethe15.tech/tags/7-days-of-mlops/"
+---
