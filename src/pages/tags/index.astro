@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { tagSlug } from '../../data/util';
+
+const posts = await getCollection('posts');
+const counts = new Map<string, { tag: string; count: number }>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    const slug = tagSlug(tag);
+    const entry = counts.get(slug) ?? { tag, count: 0 };
+    entry.count += 1;
+    counts.set(slug, entry);
+  }
+}
+const tags = [...counts.entries()].sort((a, b) => b[1].count - a[1].count);
+---
+
+<Base title="Tags · @milinddethe15" description="Posts by topic.">
+  <div class="container narrow">
+    <div class="page-head">
+      <p class="kicker">~/tags</p>
+      <h1>Tags</h1>
+    </div>
+    <section style="padding-bottom: 90px; display: flex; flex-wrap: wrap; gap: 10px;">
+      {
+        tags.map(([slug, { tag, count }]) => (
+          <a class="tag-chip" href={`/tags/${slug}/`}>
+            #{tag} · {count}
+          </a>
+        ))
+      }
+    </section>
+  </div>
+</Base>

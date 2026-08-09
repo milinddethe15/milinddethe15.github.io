@@ -1,0 +1,171 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { SITE, PROJECTS, EXPERIENCE, OSS, OSS_ALL_URL } from '../data/site';
+
+const posts = (await getCollection('posts'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 6);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+const personLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.name,
+  url: 'https://milinddethe15.tech/',
+  image: 'https://milinddethe15.tech/images/dp.jpg',
+  jobTitle: 'Platform / DevOps Engineer',
+  sameAs: [SITE.github, SITE.linkedin, SITE.x],
+});
+---
+
+<Base>
+  <section class="container narrow intro">
+    <p class="kicker kicker--prompt" aria-hidden="true">$ whoami</p>
+    <h1>Milind Dethe</h1>
+    <p class="intro__headline">
+      Building boring, reliable infrastructure<br />
+      for the cloud-native world.
+    </p>
+    <p class="intro__sub">
+      <span>platform</span>
+      <span class="dot">·</span>
+      <span>devops</span>
+      <span class="dot">·</span>
+      <span>kubernetes</span>
+      <span class="dot">·</span>
+      <span>ai infra</span>
+    </p>
+    <p class="intro__prev">
+      <span>
+        <a href="https://www.iitkgp.ac.in/" rel="noopener" target="_blank">IIT KGP</a> '26<span
+          class="intro__desc"
+        >
+          graduate</span
+        >
+      </span>
+      <span class="dot">·</span>
+      <span>
+        Ex-<a href="https://atlan.com" rel="noopener" target="_blank">Atlan</a><span
+          class="intro__desc"
+        >
+          platform</span
+        >
+      </span>
+      <span class="dot">·</span>
+      <span>
+        LFX '24 <a href="https://thanos.io" rel="noopener" target="_blank">CNCF Thanos</a>
+      </span>
+      <span class="dot">·</span>
+      <span>
+        <a href="https://github.com/kubeflow" rel="noopener" target="_blank">Kubeflow</a><span
+          class="intro__desc"
+        >
+          member</span
+        >
+      </span>
+      <span class="dot">·</span>
+      <span>
+        <a href="https://www.cncf.io/training/certification/cka/" rel="noopener" target="_blank"
+          >CKA</a
+        ><span class="intro__desc"> certified</span>
+      </span>
+    </p>
+    <p class="intro__links">
+      <a href={SITE.resume} rel="noopener" target="_blank"
+        >resume <Icon name="arrow" class="arrow-icon" /></a
+      >
+      <span>·</span>
+      <a href={`mailto:${SITE.email}`}>email</a>
+      <span>·</span>
+      <a href={SITE.github} rel="me noopener" target="_blank">github</a>
+      <span>·</span>
+      <a href={SITE.linkedin} rel="me noopener" target="_blank">linkedin</a>
+      <span>·</span>
+      <a href={SITE.x} rel="me noopener" target="_blank">x/twitter</a>
+    </p>
+  </section>
+
+  <section class="container section narrow" aria-label="Experience">
+    <div class="section-label">
+      <h2>experience</h2>
+    </div>
+    {
+      EXPERIENCE.map((e) => (
+        <div class="exp-row">
+          <div class="exp-row__when">{e.when}</div>
+          <div>
+            <h3>
+              <a href={e.url} rel="noopener" target="_blank">
+                {e.org}
+              </a>{' '}
+              <span>— {e.role}</span>
+            </h3>
+            <p>{e.detail}</p>
+          </div>
+        </div>
+      ))
+    }
+  </section>
+
+  <section class="container section narrow" aria-label="Projects" style="padding-top: 0;">
+    <div class="section-label">
+      <h2>projects</h2>
+      <a href="/projects/">see all <Icon name="arrow" class="arrow-icon" /></a>
+    </div>
+    {
+      PROJECTS.map((p) => (
+        <a
+          class="proj-row"
+          href={p.source}
+          rel={p.source.startsWith('http') ? 'noopener' : undefined}
+          target={p.source.startsWith('http') ? '_blank' : undefined}
+        >
+          <span class="proj-row__top">
+            <span class="proj-row__name">{p.title}</span>
+            <span class="proj-row__skills">{p.skills.map((s) => s.toLowerCase()).join(' · ')}</span>
+          </span>
+          <span class="proj-row__desc">{p.description}</span>
+        </a>
+      ))
+    }
+  </section>
+
+  <section class="container section narrow" aria-label="Open source" style="padding-top: 0;">
+    <div class="section-label">
+      <h2>open source</h2>
+      <a href={OSS_ALL_URL} rel="noopener" target="_blank">
+        61 merged upstream <Icon name="arrow" class="arrow-icon" />
+      </a>
+    </div>
+    {
+      OSS.map((o) => (
+        <a class="oss-row" href={o.url} rel="noopener" target="_blank">
+          <span class="oss-row__dot" aria-hidden="true" />
+          <span class="oss-row__title">{o.title}</span>
+          <span class="oss-row__repo">{o.repo}</span>
+        </a>
+      ))
+    }
+  </section>
+
+  <section class="container section narrow" aria-label="Writing" style="padding-top: 0;">
+    <div class="section-label">
+      <h2>writing</h2>
+      <a href="/posts/">see all <Icon name="arrow" class="arrow-icon" /></a>
+    </div>
+    {
+      posts.map((post) => (
+        <a class="post-line" href={`/posts/${post.id}/`}>
+          <span>{post.data.title}</span>
+          <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+        </a>
+      ))
+    }
+  </section>
+
+  <script is:inline type="application/ld+json" set:html={personLd} />
+</Base>

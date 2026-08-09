@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { tagSlug } from '../../data/util';
+
+const posts = (await getCollection('posts')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const byYear = new Map<number, typeof posts>();
+for (const post of posts) {
+  const y = post.data.date.getFullYear();
+  if (!byYear.has(y)) byYear.set(y, []);
+  byYear.get(y)!.push(post);
+}
+
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
+---
+
+<Base title="Posts · @milinddethe15" description="Build logs and notes on Kubernetes, platform engineering, MLOps, and cloud-native infrastructure.">
+  <div class="container narrow">
+    <div class="page-head">
+      <p class="kicker">~/posts</p>
+      <h1>Posts</h1>
+      <p class="lede">Build logs and things I've learned along the way.</p>
+    </div>
+
+    <section style="padding-bottom: 90px;">
+      {
+        [...byYear.entries()].map(([year, yearPosts]) => (
+          <>
+            <p class="year-label">{year}</p>
+            {yearPosts.map((post) => (
+              <div class="post-line">
+                <span class="post-line__main">
+                  <a class="post-line__title" href={`/posts/${post.id}/`}>
+                    {post.data.title}
+                  </a>
+                  {post.data.tags.length > 0 && (
+                    <span class="post-line__tags">
+                      {post.data.tags.map((tag) => (
+                        <a class="post-line__tag" href={`/tags/${tagSlug(tag)}/`}>
+                          #{tag}
+                        </a>
+                      ))}
+                    </span>
+                  )}
+                </span>
+                <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+              </div>
+            ))}
+          </>
+        ))
+      }
+    </section>
+  </div>
+</Base>
