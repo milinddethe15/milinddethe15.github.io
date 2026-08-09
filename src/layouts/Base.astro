@@ -1,0 +1,212 @@
+---
+import { SITE } from '../data/site';
+import Icon from '../components/Icon.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+  ogType?: 'website' | 'article';
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  noindex = false,
+  ogType = 'website',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const nav = [
+  { href: '/posts/', label: 'Posts' },
+  { href: '/projects/', label: 'Projects' },
+];
+const current = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.name} />
+    <meta name="theme-color" content="#130e1b" />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" sizes="any" />
+    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/index.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <link rel="preload" as="image" href="/images/bg-sky.webp" />
+    {
+      // Every weight used above the fold — preload them all to kill font swap.
+      ['400', '500', '700'].map((w) => (
+        <link
+          rel="preload"
+          href={`/fonts/space-grotesk/SpaceGrotesk-latin-${w}-normal.woff2`}
+          as="font"
+          type="font/woff2"
+          crossorigin
+        />
+      ))
+    }
+
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:image" content={new URL('/images/dp.jpg', Astro.site)} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@milinddethe15" />
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="edge-fade edge-fade--top" aria-hidden="true"></div>
+    <div class="edge-fade edge-fade--bottom" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="container narrow">
+        <div class="site-header__bar">
+          <a class="site-header__logo" href="/">milinddethe15</a>
+          <nav class="site-header__nav">
+            {
+              nav.map((item) => (
+                <a
+                  href={item.href}
+                  aria-current={current.startsWith(item.href) ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              ))
+            }
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="container narrow site-footer">
+      <p>© {new Date().getFullYear()} {SITE.name}</p>
+      <nav aria-label="Social links">
+        <a class="site-footer__resume" href={SITE.resume} rel="noopener" target="_blank">
+          resume <Icon name="arrow" class="arrow-icon" />
+        </a>
+        <a href={SITE.github} rel="me noopener" target="_blank" aria-label="GitHub">
+          <Icon name="github" />
+        </a>
+        <a href={SITE.linkedin} rel="me noopener" target="_blank" aria-label="LinkedIn">
+          <Icon name="linkedin" />
+        </a>
+        <a href={SITE.x} rel="me noopener" target="_blank" aria-label="Twitter / X">
+          <Icon name="x" />
+        </a>
+        <a href={`mailto:${SITE.email}`} aria-label="Email">
+          <Icon name="email" />
+        </a>
+        <a href="/index.xml" aria-label="RSS feed">
+          <Icon name="rss" />
+        </a>
+      </nav>
+    </footer>
+
+    <a class="to-top" href="#top" aria-label="Back to top">
+      <Icon name="back" />
+    </a>
+
+    <script is:inline>
+      // copy buttons for code blocks (posts)
+      document.querySelectorAll('.prose pre').forEach((pre) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'code-block';
+        pre.replaceWith(wrap);
+        wrap.append(pre);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'code-copy';
+        btn.textContent = 'copy';
+        btn.addEventListener('click', () => {
+          navigator.clipboard?.writeText(pre.innerText).then(() => {
+            btn.textContent = '✓ copied';
+            btn.classList.add('code-copy--done');
+            setTimeout(() => {
+              btn.textContent = 'copy';
+              btn.classList.remove('code-copy--done');
+            }, 1500);
+          });
+        });
+        wrap.append(btn);
+      });
+    </script>
+
+    <script is:inline define:vars={{ email: SITE.email }}>
+      // Email links copy the address and confirm with a small tip right
+      // above the clicked link. Falls back to mailto: if clipboard is
+      // unavailable.
+      let tip, timer;
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest?.('a[href^="mailto:"]');
+        if (!link || !navigator.clipboard) return;
+        e.preventDefault();
+        navigator.clipboard
+          .writeText(email)
+          .then(() => {
+            if (!tip) {
+              tip = document.createElement('div');
+              tip.className = 'copy-tip';
+              tip.setAttribute('role', 'status');
+              tip.textContent = 'copied';
+              document.body.append(tip);
+            }
+            const r = link.getBoundingClientRect();
+            tip.style.left = r.left + r.width / 2 + 'px';
+            tip.style.top = r.top - 8 + 'px';
+            requestAnimationFrame(() => tip.classList.add('copy-tip--show'));
+            clearTimeout(timer);
+            timer = setTimeout(() => tip.classList.remove('copy-tip--show'), 1600);
+          })
+          .catch(() => {
+            location.href = link.href;
+          });
+      });
+    </script>
+
+    {
+      SITE.cloudflareToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "${SITE.cloudflareToken}"}`}
+        />
+      )
+    }
+    {
+      SITE.gaId && (
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${SITE.gaId}`} />
+      )
+    }
+    {
+      SITE.gaId && (
+        <script is:inline define:vars={{ gaId: SITE.gaId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', gaId);
+        </script>
+      )
+    }
+  </body>
+</html>

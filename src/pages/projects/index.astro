@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { PROJECTS } from '../../data/site';
+---
+
+<Base
+  title="Projects · @milinddethe15"
+  description="Selected work, experiments, and open-source contributions — Kubernetes operators, autoscalers, and platform tooling."
+>
+  <div class="container narrow">
+    <div class="page-head">
+      <p class="kicker">~/projects</p>
+      <h1>Projects</h1>
+      <p class="lede">Selected work, experiments, and open-source contributions.</p>
+    </div>
+
+    <section style="padding-bottom: 90px;">
+      {
+        PROJECTS.map((p) => (
+          <div class="project-full">
+            <div>
+              <h2>
+                <a
+                  href={p.source}
+                  rel={p.source.startsWith('http') ? 'noopener' : undefined}
+                  target={p.source.startsWith('http') ? '_blank' : undefined}
+                >
+                  {p.title} <Icon name="arrow" class="arrow-icon" />
+                </a>
+              </h2>
+              <p>{p.description}</p>
+              <div class="chips">
+                {p.skills.map((s) => (
+                  <span>{s}</span>
+                ))}
+              </div>
+            </div>
+            {
+              p.image &&
+                (p.image.endsWith('.webm') ? (
+                  <video src={p.image} autoplay loop muted playsinline preload="metadata" aria-label={`${p.title} demo`} />
+                ) : (
+                  <img src={p.image} alt={`${p.title} preview`} loading="lazy" decoding="async" />
+                ))
+            }
+          </div>
+        ))
+      }
+    </section>
+  </div>
+</Base>

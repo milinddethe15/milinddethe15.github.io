@@ -1,0 +1,66 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { tagSlug, fmtDate } from '../../data/util';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('posts')).sort(
+    (a, b) => a.data.date.valueOf() - b.data.date.valueOf()
+  );
+  return posts.map((post, i) => ({
+    params: { id: post.id },
+    props: { post, prev: posts[i - 1] ?? null, next: posts[i + 1] ?? null },
+  }));
+}
+
+const { post, prev, next } = Astro.props;
+const { Content } = await render(post);
+
+const words = post.body?.split(/\s+/).length ?? 0;
+const minutes = Math.max(1, Math.round(words / 220));
+---
+
+<Base title={`${post.data.title} · @milinddethe15`} description={post.data.description} ogType="article">
+  <div class="read-progress" aria-hidden="true"></div>
+  <div class="container narrow">
+    <div class="prose-head">
+      <a class="back-link" href="/posts/"><Icon name="back" class="arrow-icon" /> all posts</a>
+      <h1>{post.data.title}</h1>
+      <div class="prose-head__meta">
+        <time datetime={post.data.date.toISOString()}>{fmtDate(post.data.date)}</time>
+        <span>·</span>
+        <span>{minutes} min read</span>
+        {
+          post.data.tags.map((tag) => (
+            <a href={`/tags/${tagSlug(tag)}/`}>#{tag}</a>
+          ))
+        }
+      </div>
+    </div>
+
+    <article class="prose">
+      <Content />
+      {
+        (prev || next) && (
+          <nav class="post-nav" aria-label="Adjacent posts">
+            {prev ? (
+              <a href={`/posts/${prev.id}/`}>
+                <span class="kicker">← earlier</span>
+                {prev.data.title}
+              </a>
+            ) : (
+              <span />
+            )}
+            {next && (
+              <a class="post-nav__next" href={`/posts/${next.id}/`}>
+                <span class="kicker">later →</span>
+                {next.data.title}
+              </a>
+            )}
+          </nav>
+        )
+      }
+    </article>
+  </div>
+</Base>

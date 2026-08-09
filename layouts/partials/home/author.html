@@ -1,8 +1,0 @@
-<h1>{{ .Site.Params.author }}</h1>
-{{ if reflect.IsSlice .Site.Params.info }}
-<p class="author-info">
-  {{ range $index, $element := .Site.Params.info }}{{ if gt $index 0 }} | {{ end }}{{ $element | markdownify }}{{ end }}
-</p>
-{{ else }}
-<p class="author-info">{{ .Site.Params.info | markdownify }}</p>
-{{ end }}

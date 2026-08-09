@@ -1,0 +1,1361 @@
+/* ---------------------------------------------------------------- fonts */
+/* Space Grotesk, self-hosted, latin subset (~15KB per weight). */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/space-grotesk/SpaceGrotesk-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/space-grotesk/SpaceGrotesk-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/space-grotesk/SpaceGrotesk-latin-700-normal.woff2') format('woff2');
+}
+
+/* --------------------------------------------------------------- tokens */
+:root {
+  --bg: #130e1b;
+  --bg-raised: #1a1425;
+  --bg-hover: #221a30;
+  --glass: rgba(255, 255, 255, 0.055);
+  --glass-hover: rgba(255, 255, 255, 0.095);
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.17);
+  --text: #f4f4f9;
+  --text-dim: #b8b8c4;
+  --text-faint: #9c9ca8; /* ~7:1 on --bg — comfortably AA for small text */
+  --accent: #a8a3f7;
+  --accent-bright: #c7c3ff;
+  --radius: 14px;
+  --radius-pill: 999px;
+  --font: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --mono: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Menlo, Consolas, monospace;
+  --container: 1160px;
+}
+
+/* ----------------------------------------------------- view transitions */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;
+}
+
+.site-header {
+  view-transition-name: site-header;
+}
+
+.site-footer {
+  view-transition-name: site-footer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------- reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  color-scheme: dark;
+  scrollbar-gutter: stable;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* The twilight-sky wallpaper, fixed behind everything (38KB webp).
+   Content scrolls over it. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: url('/images/bg-sky.webp') center top / cover no-repeat;
+}
+
+/* readability overlay: the sky shows through up top, dims toward
+   near-solid where the reading happens */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.14 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(
+      to bottom,
+      rgb(16 14 18 / 0.22) 0%,
+      rgb(16 14 18 / 0.32) 40%,
+      rgb(16 14 18 / 0.42) 100%
+    );
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: #130e1b;
+}
+
+/* ---------------------------------------------------------- primitives */
+.container {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.kicker {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+/* terminal-prompt kicker with a blinking block cursor */
+.kicker--prompt::after {
+  content: '▊';
+  margin-left: 7px;
+  color: var(--accent);
+  animation: blink 1.1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kicker--prompt::after {
+    animation: none;
+  }
+}
+
+.skip-link {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+  padding: 10px 20px;
+  background: var(--text);
+  color: #0b0b0d;
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+  font-size: 0.9rem;
+  transform: translateY(-72px);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 26px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.pill:hover {
+  background: var(--bg-hover);
+  border-color: #3a3a48;
+}
+
+.pill--solid {
+  background: var(--text);
+  border-color: var(--text);
+  color: #0b0b0d;
+}
+
+.pill--solid:hover {
+  background: var(--accent-bright);
+  border-color: var(--accent-bright);
+  color: #0b0b0d;
+}
+
+.arrow-icon {
+  width: 0.85em;
+  height: 0.85em;
+  flex: none;
+}
+
+/* ----------------------------------------------------------- edge fade */
+/* Soft scrims: content dissolves into the page background as it scrolls
+   out at the viewport edges. The bottom one fades itself away over the
+   final stretch of the page so the footer is never shadowed. */
+.edge-fade {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 88px;
+  z-index: 8;
+  pointer-events: none;
+}
+
+.edge-fade--top {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    rgb(19 14 26 / 0.45) 0%,
+    rgb(19 14 26 / 0.34) 22%,
+    rgb(19 14 26 / 0.26) 44%,
+    rgb(19 14 26 / 0.14) 66%,
+    rgb(19 14 26 / 0.05) 84%,
+    transparent 100%
+  );
+}
+
+.edge-fade--bottom {
+  bottom: 0;
+  /* hidden unless the scroll-driven animation below activates, so pages
+     that don't scroll (and browsers without scroll timelines) never
+     shadow the footer */
+  opacity: 0;
+  background: linear-gradient(
+    to top,
+    rgb(19 14 26) 0%,
+    rgb(19 14 26 / 0.87) 22%,
+    rgb(19 14 26 / 0.6) 44%,
+    rgb(19 14 26 / 0.33) 66%,
+    rgb(19 14 26 / 0.12) 84%,
+    transparent 100%
+  );
+}
+
+@supports (animation-timeline: scroll()) {
+  .edge-fade--bottom {
+    animation: edge-bottom linear both;
+    animation-timeline: scroll();
+  }
+}
+
+/* visible through the scroll, gone over the last ~8% of the page */
+@keyframes edge-bottom {
+  0%,
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* -------------------------------------------------------------- header */
+/* Floating pill: transparent at the top of the page; as you scroll it
+   smoothly gains its rounded border, frosted background, and shadow
+   (scroll-driven, no JS). Browsers without scroll timelines simply show
+   the solid pill all the time. */
+.site-header {
+  position: sticky;
+  top: 12px;
+  z-index: 9;
+  padding-top: 18px;
+  /* the header shell never eats clicks on content scrolled beneath it */
+  pointer-events: none;
+}
+
+/* invisible strip along the viewport's top edge — hovering it summons
+   the tucked-away pill */
+.site-header::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  pointer-events: auto;
+}
+
+.site-header__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  pointer-events: auto;
+  transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.3s;
+}
+
+/* Scroll position scrubs --tuck between 0 (top of page) and 1 (scrolled).
+   The pill's transform/opacity DERIVE from --tuck as normal declarations,
+   so hover can change them with real transitions in both directions —
+   no snapping, which an animation-owned transform would cause. */
+@property --tuck {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@supports (animation-timeline: scroll()) {
+  /* pointer devices: tuck the pill away as you keep scrolling; hovering
+     the top edge (or tabbing into the nav) brings it back and HOLDS it
+     as long as the pointer stays on the pill */
+  @media (hover: hover) and (pointer: fine) {
+    .site-header {
+      animation: header-tuck linear both;
+      animation-timeline: scroll();
+      animation-range: 160px 340px;
+    }
+
+    .site-header:hover,
+    .site-header:focus-within {
+      --tuck: 0 !important;
+    }
+
+    .site-header__bar {
+      transform: translateY(calc(var(--tuck, 0) * -100px));
+      opacity: calc(1 - var(--tuck, 0));
+      /* the delay keeps the pill up while the pointer crosses the small
+         gap between the top edge and the pill itself */
+      transition:
+        transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s,
+        opacity 0.28s linear 0.15s;
+    }
+
+    .site-header:hover .site-header__bar,
+    .site-header:focus-within .site-header__bar {
+      transition-delay: 0s, 0s;
+    }
+  }
+}
+
+@keyframes header-tuck {
+  to {
+    --tuck: 1;
+  }
+}
+
+.site-header__logo {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-right: 8px;
+}
+
+.site-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.site-header__nav a {
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  transition: color 0.15s, background 0.15s;
+}
+
+.site-header__nav a:hover,
+.site-header__nav a[aria-current='page'] {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* ---------------------------------------------------------------- intro */
+.intro {
+  padding-block: 72px 28px;
+}
+
+.intro h1 {
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 10px;
+}
+
+.intro__headline {
+  margin-top: 26px;
+  font-size: 1.35rem;
+  line-height: 1.5;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.intro__sub {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 24px;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.intro__prev {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 14px;
+  font-size: 0.92rem;
+  color: var(--text-dim);
+}
+
+.intro__sub .dot,
+.intro__prev .dot {
+  color: var(--text-faint);
+}
+
+.intro__prev a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--text) 35%, transparent);
+  text-underline-offset: 3px;
+}
+
+.intro__prev a:hover {
+  color: var(--accent-bright);
+}
+
+.intro__links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+.intro__links span {
+  color: var(--text-faint);
+}
+
+.intro__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-dim);
+  text-decoration: underline;
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 4px;
+}
+
+.intro__links a:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+/* skill chips (projects page) */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.chips span {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+}
+
+/* ------------------------------------------------------------ sections */
+.section {
+  padding-block: 64px;
+}
+
+.narrow {
+  max-width: calc(860px + 48px); /* content + container padding */
+}
+
+.section-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.section-label h2 {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+.section-label a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-faint);
+  transition: color 0.15s;
+}
+
+.section-label a:hover {
+  color: var(--accent);
+}
+
+/* ------------------------------------------------------- project rows */
+.proj-row {
+  display: block;
+  padding: 15px 0;
+  border-bottom: 1px dashed var(--border-strong);
+  transition: border-color 0.15s;
+}
+
+.proj-row:hover {
+  border-color: var(--text-faint);
+}
+
+.proj-row__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.proj-row__name {
+  font-size: 0.97rem;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+.proj-row:hover .proj-row__name {
+  color: var(--accent-bright);
+}
+
+.proj-row__skills {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-faint);
+}
+
+.proj-row__desc {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.87rem;
+  color: var(--text-dim);
+  max-width: 68ch;
+}
+
+/* --------------------------------------------------- open source rows */
+.oss-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--border-strong);
+  font-size: 0.92rem;
+}
+
+.oss-row__dot {
+  flex: none;
+  align-self: center;
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+}
+
+.oss-row__title {
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+.oss-row:hover .oss-row__title {
+  color: var(--accent-bright);
+}
+
+.oss-row__repo {
+  flex: none;
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+/* ---------------------------------------------------------- experience */
+.exp-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 8px 28px;
+  padding: 22px 0;
+  border-bottom: 1px dashed var(--border-strong);
+}
+
+.exp-row:last-child {
+  border-bottom: 0;
+}
+
+.exp-row__when {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  padding-top: 3px;
+}
+
+.exp-row h3 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.exp-row h3 a:hover {
+  color: var(--accent);
+}
+
+.exp-row h3 span {
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+.exp-row p {
+  margin-top: 4px;
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  max-width: 62ch;
+}
+
+/* -------------------------------------------------------------- footer */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding-block: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.site-footer p {
+  font-size: 0.85rem;
+  color: var(--text-faint);
+}
+
+/* prev / next post navigation */
+.post-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  max-width: 700px;
+  margin-top: 46px;
+}
+
+/* quiet cards — override the .prose link styling they sit inside */
+.prose .post-nav a {
+  display: block;
+  padding: 16px 20px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.prose .post-nav a:hover {
+  background: var(--glass-hover);
+  border-color: var(--border-strong);
+  color: var(--accent-bright);
+}
+
+.post-nav a .kicker {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.post-nav a.post-nav__next {
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .site-header__bar {
+    padding: 6px 12px;
+    gap: 2px;
+  }
+
+  .site-header__logo {
+    font-size: 0.9rem;
+    margin-right: 4px;
+  }
+
+  .site-header__nav a {
+    padding: 6px 7px;
+    font-size: 0.82rem;
+  }
+
+  /* compact hero meta: drop descriptor words, tighten the dot rows */
+  .intro__desc {
+    display: none;
+  }
+
+  /* let the headline wrap naturally instead of the desktop line break */
+  .intro__headline br {
+    display: none;
+  }
+
+  .intro__sub,
+  .intro__prev,
+  .intro__links {
+    gap: 6px 10px;
+  }
+
+  .post-nav {
+    grid-template-columns: 1fr;
+  }
+}
+
+.site-footer nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.site-footer__resume {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 10px;
+  padding: 8px 4px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  transition: color 0.15s;
+}
+
+.site-footer__resume:hover {
+  color: var(--accent);
+}
+
+.site-footer nav a {
+  display: inline-flex;
+  padding: 8px;
+  border-radius: 8px;
+  color: var(--text-dim);
+  transition: color 0.15s;
+}
+
+.site-footer nav a:hover {
+  color: var(--accent);
+}
+
+.site-footer nav svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* -------------------------------------------------------- inner pages */
+.page-head {
+  padding-block: 72px 26px;
+}
+
+.page-head h1 {
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 10px;
+}
+
+.page-head .lede {
+  margin-top: 12px;
+  color: var(--text-dim);
+  max-width: 60ch;
+}
+
+.year-label {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--text-faint);
+  margin: 38px 0 6px;
+}
+
+/* full-page post listing rows */
+.post-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 14px 4px;
+  border-bottom: 1px dashed var(--border-strong);
+  font-size: 0.98rem;
+  font-weight: 500;
+}
+
+/* title with its tags stacked underneath; date stays on the title line */
+.post-line__main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.post-line__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.post-line:hover .post-line__title,
+a.post-line:hover {
+  color: var(--accent-bright);
+}
+
+.post-line time {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--text-faint);
+  flex: none;
+}
+
+.post-line__tag {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-faint);
+  transition: color 0.15s;
+}
+
+.post-line__tag:hover {
+  color: var(--accent);
+}
+
+/* tag chips */
+.tag-chip {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  padding: 5px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tag-chip:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* projects page cards */
+.project-full {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 28px;
+  align-items: center;
+  padding: 26px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.15s;
+}
+
+.project-full:hover {
+  border-color: var(--border-strong);
+}
+
+.project-full + .project-full {
+  margin-top: 16px;
+}
+
+.project-full h2 {
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.project-full h2 a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-full h2 a:hover {
+  color: var(--accent);
+}
+
+.project-full > div > p {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+
+.project-full img,
+.project-full video {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: contain;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+
+/* -------------------------------------------------------------- prose */
+.prose {
+  max-width: 700px;
+  margin-inline: auto;
+  padding-bottom: 90px;
+}
+
+.prose-head {
+  max-width: 700px;
+  margin-inline: auto;
+  padding-block: 76px 34px;
+}
+
+.prose-head h1 {
+  font-size: 2.1rem;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  font-weight: 700;
+  margin-top: 14px;
+}
+
+.prose-head__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-faint);
+}
+
+.prose-head__meta a {
+  color: var(--text-dim);
+}
+
+.prose-head__meta a:hover {
+  color: var(--accent);
+}
+
+.prose p,
+.prose ul,
+.prose ol {
+  margin-bottom: 1.15em;
+  color: #dedee8;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+
+.prose li {
+  margin-bottom: 0.35em;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin: 1.9em 0 0.7em;
+}
+
+.prose h2 { font-size: 1.45rem; }
+.prose h3 { font-size: 1.15rem; }
+.prose h4 { font-size: 1rem; }
+
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  text-underline-offset: 3px;
+}
+
+.prose a:hover {
+  color: var(--accent-bright);
+  text-decoration-color: var(--accent-bright);
+}
+
+.prose strong {
+  color: var(--text);
+}
+
+.prose img {
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-block: 0.5em;
+}
+
+.prose blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 18px;
+  margin-block: 1.4em;
+  color: var(--text-dim);
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px dashed var(--border-strong);
+  margin-block: 2.2em;
+}
+
+.prose code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+}
+
+.prose :not(pre) > code {
+  background: rgba(30, 23, 42, 0.45);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0.12em 0.38em;
+  color: var(--accent-bright);
+}
+
+.prose pre {
+  background: rgba(10, 9, 14, 0.5) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  overflow-x: auto;
+  margin-block: 1.3em;
+  line-height: 1.55;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-block: 1.3em;
+  display: block;
+  overflow-x: auto;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid var(--border-strong);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.prose th {
+  background: var(--bg-raised);
+}
+
+.prose-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 34px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+.back-link:hover {
+  color: var(--accent);
+}
+
+/* -------------------------------------------------------- back to top */
+.to-top {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 9; /* above the bottom edge blur so it stays crisp */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-strong);
+  color: var(--text-dim);
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.to-top:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--bg-hover);
+}
+
+.to-top svg {
+  width: 16px;
+  height: 16px;
+  transform: rotate(90deg); /* left arrow -> up */
+}
+
+/* Fade in after ~600px of scroll — scroll-driven, no JS. Browsers
+   without scroll timelines just show the button all the time. */
+@supports (animation-timeline: scroll()) {
+  .to-top {
+    animation: to-top-reveal linear both;
+    animation-timeline: scroll();
+    animation-range: 200px 700px;
+  }
+}
+
+@keyframes to-top-reveal {
+  from {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------- code copy */
+.code-block {
+  position: relative;
+  margin-block: 1.3em;
+}
+
+.code-block pre {
+  margin-block: 0;
+}
+
+.code-copy {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 12px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  background: rgba(48, 44, 58, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.code-block:hover .code-copy,
+.code-copy:focus-visible {
+  opacity: 1;
+}
+
+.code-copy:hover {
+  color: var(--text);
+  border-color: var(--text-faint);
+}
+
+.code-copy--done {
+  color: var(--accent);
+  border-color: var(--accent);
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .code-copy {
+    opacity: 0.75;
+  }
+}
+
+/* -------------------------------------------------- reading progress */
+.read-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 10;
+  background: var(--accent);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+}
+
+@supports (animation-timeline: scroll()) {
+  .read-progress {
+    animation: read-grow linear both;
+    animation-timeline: scroll();
+  }
+}
+
+@keyframes read-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* -------------------------------------------------------------- copy tip */
+/* small confirmation that pops up right above the clicked email link */
+.copy-tip {
+  position: fixed;
+  z-index: 10;
+  padding: 6px 14px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% + 5px));
+  transition: opacity 0.2s, transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.copy-tip::before {
+  content: '✓ ';
+  color: var(--accent);
+}
+
+/* little arrow pointing down at the link */
+.copy-tip::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -4.5px;
+  width: 8px;
+  height: 8px;
+  background: rgb(42, 39, 50);
+  border-right: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.copy-tip--show {
+  opacity: 1;
+  transform: translate(-50%, -100%);
+}
+
+/* ------------------------------------------------------ scroll reveals */
+/* Pure CSS scroll-driven animations; browsers without support (or with
+   reduced motion) simply render everything in place. The keyframe has no
+   `to` block so elements settle into their normal styles — hover
+   transforms keep working after the reveal. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .section-label,
+    .proj-row,
+    .oss-row,
+    .exp-row,
+    .project-full,
+    .post-line {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 45%;
+    }
+  }
+}
+
+/* motion-only (no fade) so text keeps AA contrast at every scroll state */
+@keyframes rise {
+  from {
+    transform: translateY(18px);
+  }
+}
+
+/* ---------------------------------------------------------- responsive */
+@media (max-width: 900px) {
+  .project-full {
+    grid-template-columns: 1fr;
+  }
+
+  .project-full img {
+    order: -1;
+    max-width: 340px;
+  }
+
+  .exp-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding-block: 52px;
+  }
+}
