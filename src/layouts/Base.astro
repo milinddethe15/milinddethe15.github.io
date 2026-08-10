@@ -31,10 +31,29 @@ const current = Astro.url.pathname;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      // stamp the saved theme before first paint (no flash of the wrong
+      // theme) and preload that theme's wallpaper — not the default's
+      {
+        let t = 'matte';
+        try {
+          const saved = localStorage.getItem('theme');
+          if (['twilight', 'aurora', 'indigo', 'sand'].includes(saved)) {
+            document.documentElement.dataset.theme = saved;
+            t = saved;
+          }
+        } catch {}
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = '/images/bg-' + t + '.webp';
+        document.head.append(link);
+      }
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={SITE.name} />
-    <meta name="theme-color" content="#130e1b" />
+    <meta name="theme-color" content="#1c1c1e" />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
 
@@ -45,7 +64,9 @@ const current = Astro.url.pathname;
     <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/index.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
-    <link rel="preload" as="image" href="/images/bg-sky.webp" />
+    <noscript>
+      <link rel="preload" as="image" href="/images/bg-matte.webp" />
+    </noscript>
     {
       // Every weight used above the fold — preload them all to kill font swap.
       ['400', '500', '700'].map((w) => (
@@ -64,8 +85,11 @@ const current = Astro.url.pathname;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content={ogType} />
-    <meta property="og:image" content={new URL('/images/dp.jpg', Astro.site)} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={new URL('/images/og.jpg', Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Milind Dethe — building boring, reliable infrastructure for the cloud-native world" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:creator" content="@milinddethe15" />
   </head>
   <body id="top">
@@ -87,6 +111,25 @@ const current = Astro.url.pathname;
                 </a>
               ))
             }
+            <div class="theme-menu">
+              <button
+                class="theme-menu__btn"
+                type="button"
+                aria-label="Switch theme"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <Icon name="theme" />
+              </button>
+              <div class="theme-menu__pop" hidden>
+                <button type="button" data-theme-opt="matte">matte</button>
+                <button type="button" data-theme-opt="twilight">twilight</button>
+                <button type="button" data-theme-opt="indigo">indigo</button>
+                <button type="button" data-theme-opt="aurora">aurora</button>
+                <button type="button" data-theme-opt="sand">sand</button>
+                <p class="theme-menu__hint">press t to cycle</p>
+              </div>
+            </div>
           </nav>
         </div>
       </div>
@@ -147,6 +190,112 @@ const current = Astro.url.pathname;
         });
         wrap.append(btn);
       });
+    </script>
+
+    <script is:inline>
+      // Nav states: capsule background appears once the page scrolls
+      // (bare links over the hero at the top); the pill tucks away on
+      // scroll-down and returns on any scroll-up. On pointer devices,
+      // hovering the top edge also summons it (pure CSS).
+      {
+        const header = document.querySelector('.site-header');
+        let last = scrollY;
+        const update = () => {
+          const y = Math.max(0, scrollY);
+          header.classList.toggle('site-header--solid', y > 24);
+          if (y > last + 2 && y > 140) header.classList.add('site-header--tucked');
+          else if (y < last - 2) header.classList.remove('site-header--tucked');
+          last = y;
+        };
+        update();
+        addEventListener('scroll', update, { passive: true });
+      }
+    </script>
+
+    <script is:inline>
+      // theme switcher: nav menu + `t` cycles; choice persists in localStorage
+      {
+        const root = document.documentElement;
+        const menu = document.querySelector('.theme-menu');
+        const btn = menu.querySelector('.theme-menu__btn');
+        const pop = menu.querySelector('.theme-menu__pop');
+        const meta = document.querySelector('meta[name="theme-color"]');
+        // key order = `t` cycle order: neutral → purple → blue → teal →
+        // light
+        const colors = {
+          matte: '#1c1c1e',
+          twilight: '#17121f',
+          indigo: '#16132e',
+          aurora: '#0e141b',
+          sand: '#e7dfd0',
+        };
+        const THEMES = Object.keys(colors);
+        const current = () => root.dataset.theme || 'matte';
+        const paint = () => {
+          pop.querySelectorAll('[data-theme-opt]').forEach((b) => {
+            b.setAttribute('aria-pressed', String(b.dataset.themeOpt === current()));
+          });
+          meta.content = colors[current()];
+        };
+        let toast, toastTimer;
+        const showToast = (msg, ms, tip) => {
+          if (!toast) {
+            toast = document.createElement('div');
+            toast.setAttribute('role', 'status');
+            document.body.append(toast);
+          }
+          toast.className = 'theme-toast' + (tip ? ' theme-toast--tip' : '');
+          toast.textContent = msg;
+          requestAnimationFrame(() => toast.classList.add('theme-toast--show'));
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(() => toast.classList.remove('theme-toast--show'), ms || 1800);
+        };
+        const apply = (t) => {
+          if (t === 'matte') delete root.dataset.theme;
+          else root.dataset.theme = t;
+          try {
+            localStorage.setItem('theme', t);
+          } catch {}
+          paint();
+        };
+        const close = () => {
+          pop.hidden = true;
+          btn.setAttribute('aria-expanded', 'false');
+        };
+        btn.addEventListener('click', () => {
+          pop.hidden = !pop.hidden;
+          btn.setAttribute('aria-expanded', String(!pop.hidden));
+        });
+        pop.addEventListener('click', (e) => {
+          const b = e.target.closest('[data-theme-opt]');
+          if (!b) return;
+          apply(b.dataset.themeOpt);
+          close();
+        });
+        document.addEventListener('click', (e) => {
+          if (!pop.hidden && !menu.contains(e.target)) close();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !pop.hidden) {
+            close();
+            btn.focus();
+            return;
+          }
+          if (e.key !== 't' || e.ctrlKey || e.metaKey || e.altKey) return;
+          if (e.target.closest?.('input, textarea, select, [contenteditable]')) return;
+          const next = THEMES[(THEMES.indexOf(current()) + 1) % THEMES.length];
+          apply(next);
+          showToast('theme: ' + next);
+        });
+        paint();
+        // one-time hint so visitors learn the shortcut
+        try {
+          if (!localStorage.getItem('theme-tip')) {
+            localStorage.setItem('theme-tip', '1');
+            setTimeout(() => showToast('press t to switch themes', 3500, true), 1200);
+          }
+        } catch {}
+      }
     </script>
 
     <script is:inline define:vars={{ email: SITE.email }}>

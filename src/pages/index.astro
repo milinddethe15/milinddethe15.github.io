@@ -8,6 +8,26 @@ const posts = (await getCollection('posts'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 6);
 
+// Merged-PR count fetched once per build; falls back to the last known
+// count if the GitHub API is unreachable.
+let ossCount = 61;
+try {
+  const res = await fetch(
+    'https://api.github.com/search/issues?per_page=1&q=' +
+      encodeURIComponent('is:pr is:merged author:milinddethe15 -user:milinddethe15'),
+    {
+      headers: {
+        Accept: 'application/vnd.github+json',
+        'User-Agent': 'milinddethe15.tech-build',
+        ...(process.env.GITHUB_TOKEN
+          ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
+          : {}),
+      },
+    }
+  );
+  if (res.ok) ossCount = (await res.json()).total_count ?? ossCount;
+} catch {}
+
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
@@ -24,12 +44,41 @@ const personLd = JSON.stringify({
 
 <Base>
   <section class="container narrow intro">
-    <p class="kicker kicker--prompt" aria-hidden="true">$ whoami</p>
-    <h1>Milind Dethe</h1>
-    <p class="intro__headline">
-      Building boring, reliable infrastructure<br />
-      for the cloud-native world.
-    </p>
+    <p class="kicker kicker--prompt" aria-hidden="true">whoami</p>
+    <div class="intro__grid">
+      <div>
+        <h1>Milind Dethe</h1>
+        <p class="intro__headline">
+          Building boring, reliable infrastructure<br />
+          for the cloud-native world.
+        </p>
+      </div>
+      <dl class="intro__facts">
+        <div>
+          <dt>edu</dt>
+          <dd><a href="https://www.iitkgp.ac.in/" rel="noopener" target="_blank">IIT KGP</a> '26</dd>
+        </div>
+        <div>
+          <dt>prev</dt>
+          <dd><a href="https://atlan.com" rel="noopener" target="_blank">Atlan</a> · platform</dd>
+        </div>
+        <div>
+          <dt>oss</dt>
+          <dd>
+            LFX '24 <a href="https://thanos.io" rel="noopener" target="_blank">Thanos</a> ·
+            <a href="https://github.com/kubeflow" rel="noopener" target="_blank">Kubeflow</a>
+          </dd>
+        </div>
+        <div>
+          <dt>cert</dt>
+          <dd>
+            <a href="https://www.cncf.io/training/certification/cka/" rel="noopener" target="_blank"
+              >CKA</a
+            > · Aug 2026
+          </dd>
+        </div>
+      </dl>
+    </div>
     <p class="intro__sub">
       <span>platform</span>
       <span class="dot">·</span>
@@ -38,41 +87,6 @@ const personLd = JSON.stringify({
       <span>kubernetes</span>
       <span class="dot">·</span>
       <span>ai infra</span>
-    </p>
-    <p class="intro__prev">
-      <span>
-        <a href="https://www.iitkgp.ac.in/" rel="noopener" target="_blank">IIT KGP</a> '26<span
-          class="intro__desc"
-        >
-          graduate</span
-        >
-      </span>
-      <span class="dot">·</span>
-      <span>
-        Ex-<a href="https://atlan.com" rel="noopener" target="_blank">Atlan</a><span
-          class="intro__desc"
-        >
-          platform</span
-        >
-      </span>
-      <span class="dot">·</span>
-      <span>
-        LFX '24 <a href="https://thanos.io" rel="noopener" target="_blank">CNCF Thanos</a>
-      </span>
-      <span class="dot">·</span>
-      <span>
-        <a href="https://github.com/kubeflow" rel="noopener" target="_blank">Kubeflow</a><span
-          class="intro__desc"
-        >
-          member</span
-        >
-      </span>
-      <span class="dot">·</span>
-      <span>
-        <a href="https://www.cncf.io/training/certification/cka/" rel="noopener" target="_blank"
-          >CKA</a
-        ><span class="intro__desc"> certified</span>
-      </span>
     </p>
     <p class="intro__links">
       <a href={SITE.resume} rel="noopener" target="_blank"
@@ -117,7 +131,9 @@ const personLd = JSON.stringify({
       <a href="/projects/">see all <Icon name="arrow" class="arrow-icon" /></a>
     </div>
     {
-      PROJECTS.map((p) => (
+      // homepage shows real repos only; the blog-series entries
+      // (internal /tags/ links) live on the full projects page
+      PROJECTS.filter((p) => p.source.startsWith('http')).map((p) => (
         <a
           class="proj-row"
           href={p.source}
@@ -138,7 +154,7 @@ const personLd = JSON.stringify({
     <div class="section-label">
       <h2>open source</h2>
       <a href={OSS_ALL_URL} rel="noopener" target="_blank">
-        61 merged upstream <Icon name="arrow" class="arrow-icon" />
+        {ossCount} merged upstream <Icon name="arrow" class="arrow-icon" />
       </a>
     </div>
     {

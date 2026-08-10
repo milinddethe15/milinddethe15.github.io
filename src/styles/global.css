@@ -24,9 +24,9 @@
 
 /* --------------------------------------------------------------- tokens */
 :root {
-  --bg: #130e1b;
-  --bg-raised: #1a1425;
-  --bg-hover: #221a30;
+  --bg: #141416;
+  --bg-raised: #1c1c1f;
+  --bg-hover: #242428;
   --glass: rgba(255, 255, 255, 0.055);
   --glass-hover: rgba(255, 255, 255, 0.095);
   --border: rgba(255, 255, 255, 0.09);
@@ -41,6 +41,118 @@
   --font: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
   --mono: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Menlo, Consolas, monospace;
   --container: 1160px;
+  --prose-text: #dedee8;
+  --code-chip-bg: rgba(30, 30, 35, 0.5);
+  --code-chip-text: var(--accent-bright);
+  --pre-bg: rgba(10, 9, 14, 0.5);
+  /* scenery tokens — user-selectable themes override these plus the
+     surface colors above; sand (light) also re-themes text and accent */
+  --bg-image: url('/images/bg-matte.webp');
+  --overlay: linear-gradient(
+    to bottom,
+    rgb(15 15 17 / 0.22) 0%,
+    rgb(15 15 17 / 0.32) 40%,
+    rgb(15 15 17 / 0.42) 100%
+  );
+  --scrim-rgb: 15 15 17;
+  /* the charcoal-gradient capsule, running vertically and biased toward
+     its lighter end — same look as the original diagonal version, but
+     even from left to right. Near-opaque so the page behind can never
+     tint or show through it. */
+  --capsule: linear-gradient(to bottom, rgb(46 46 48 / 0.97), rgb(35 35 38 / 0.97));
+  /* the reading bar wears the navbar's tint, brightened enough to read
+     as a line — one per theme, same family as that theme's capsule */
+  --progress: #a9a9b3;
+  --theme-color: #1c1c1e;
+}
+
+/* user-selectable theme: the blurred pixel-twilight wallpaper.
+   data-theme is stamped on <html> before first paint (Base.astro). */
+[data-theme='twilight'] {
+  --bg: #130e1b;
+  --bg-raised: #1a1425;
+  --bg-hover: #221a30;
+  --bg-image: url('/images/bg-twilight.webp');
+  --overlay: linear-gradient(
+    to bottom,
+    rgb(19 14 26 / 0.38) 0%,
+    rgb(19 14 26 / 0.58) 40%,
+    rgb(19 14 26 / 0.76) 100%
+  );
+  --scrim-rgb: 19 14 26;
+  --capsule: linear-gradient(to bottom, rgb(48 40 62 / 0.97), rgb(36 30 48 / 0.97));
+  --progress: #9d84dd;
+  --theme-color: #17121f;
+}
+
+/* deep night blue with soft teal aurora bands (generated, 6KB) */
+[data-theme='aurora'] {
+  --bg: #0c1117;
+  --bg-raised: #131b22;
+  --bg-hover: #1a242e;
+  --bg-image: url('/images/bg-aurora.webp');
+  --overlay: linear-gradient(
+    to bottom,
+    rgb(9 13 18 / 0.25) 0%,
+    rgb(9 13 18 / 0.38) 40%,
+    rgb(9 13 18 / 0.5) 100%
+  );
+  --scrim-rgb: 9 13 18;
+  --capsule: linear-gradient(to bottom, rgb(38 48 54 / 0.97), rgb(28 36 41 / 0.97));
+  --progress: #7fd6c8;
+  --theme-color: #0e141b;
+}
+
+/* deep indigo with electric halftone waves (Milind's wallpaper) */
+[data-theme='indigo'] {
+  --bg: #12102a;
+  --bg-raised: #1a1738;
+  --bg-hover: #232050;
+  --bg-image: url('/images/bg-indigo.webp');
+  --overlay: linear-gradient(
+    to bottom,
+    rgb(14 12 32 / 0.3) 0%,
+    rgb(14 12 32 / 0.42) 40%,
+    rgb(14 12 32 / 0.52) 100%
+  );
+  --scrim-rgb: 14 12 32;
+  --capsule: linear-gradient(to bottom, rgb(46 43 84 / 0.97), rgb(34 32 62 / 0.97));
+  --progress: #6467f2;
+  --theme-color: #16132e;
+}
+
+/* light theme: warm paper over the sand-dune photo (Milind's wallpaper).
+   The only theme that flips text/glass/borders — and the accent deepens
+   so links keep contrast on the light ground. Code blocks stay dark. */
+[data-theme='sand'] {
+  color-scheme: light;
+  --bg: #ece5d8;
+  --bg-raised: #e2daca;
+  --bg-hover: #d8cfbd;
+  --glass: rgba(60, 50, 30, 0.05);
+  --glass-hover: rgba(60, 50, 30, 0.09);
+  --border: rgba(60, 50, 30, 0.14);
+  --border-strong: rgba(60, 50, 30, 0.26);
+  --text: #201c15;
+  --text-dim: #4c463c;
+  --text-faint: #6d665a;
+  --accent: #5b51d8;
+  --accent-bright: #4038c7;
+  --prose-text: #322d24;
+  --code-chip-bg: rgba(60, 50, 30, 0.08);
+  --code-chip-text: var(--accent);
+  --pre-bg: rgb(26 24 29 / 0.95);
+  --bg-image: url('/images/bg-sand.webp');
+  --overlay: linear-gradient(
+    to bottom,
+    rgb(242 236 226 / 0.22) 0%,
+    rgb(242 236 226 / 0.34) 40%,
+    rgb(242 236 226 / 0.46) 100%
+  );
+  --scrim-rgb: 236 229 216;
+  --capsule: linear-gradient(to bottom, rgb(252 248 240 / 0.97), rgb(240 233 221 / 0.97));
+  --progress: #a5915f;
+  --theme-color: #e7dfd0;
 }
 
 /* ----------------------------------------------------- view transitions */
@@ -98,15 +210,14 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* The twilight-sky wallpaper, fixed behind everything (38KB webp).
-   Content scrolls over it. */
+/* The theme wallpaper, fixed behind everything. Content scrolls over it. */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: url('/images/bg-sky.webp') center top / cover no-repeat;
+  background: var(--bg-image) center top / cover no-repeat;
 }
 
 /* readability overlay: the sky shows through up top, dims toward
@@ -119,12 +230,7 @@ body::after {
   pointer-events: none;
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.14 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E"),
-    linear-gradient(
-      to bottom,
-      rgb(16 14 18 / 0.22) 0%,
-      rgb(16 14 18 / 0.32) 40%,
-      rgb(16 14 18 / 0.42) 100%
-    );
+    var(--overlay);
 }
 
 img,
@@ -140,7 +246,7 @@ a {
 
 ::selection {
   background: var(--accent);
-  color: #130e1b;
+  color: var(--bg);
 }
 
 /* ---------------------------------------------------------- primitives */
@@ -157,26 +263,6 @@ a {
   color: var(--text-dim);
 }
 
-/* terminal-prompt kicker with a blinking block cursor */
-.kicker--prompt::after {
-  content: '▊';
-  margin-left: 7px;
-  color: var(--accent);
-  animation: blink 1.1s steps(2, start) infinite;
-}
-
-@keyframes blink {
-  to {
-    visibility: hidden;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .kicker--prompt::after {
-    animation: none;
-  }
-}
-
 .skip-link {
   position: fixed;
   top: 14px;
@@ -184,7 +270,7 @@ a {
   z-index: 10;
   padding: 10px 20px;
   background: var(--text);
-  color: #0b0b0d;
+  color: var(--bg);
   border-radius: var(--radius-pill);
   font-weight: 500;
   font-size: 0.9rem;
@@ -199,36 +285,6 @@ a {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 4px;
-}
-
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 26px;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-pill);
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--text);
-  transition: border-color 0.15s, background 0.15s;
-}
-
-.pill:hover {
-  background: var(--bg-hover);
-  border-color: #3a3a48;
-}
-
-.pill--solid {
-  background: var(--text);
-  border-color: var(--text);
-  color: #0b0b0d;
-}
-
-.pill--solid:hover {
-  background: var(--accent-bright);
-  border-color: var(--accent-bright);
-  color: #0b0b0d;
 }
 
 .arrow-icon {
@@ -254,11 +310,11 @@ a {
   top: 0;
   background: linear-gradient(
     to bottom,
-    rgb(19 14 26 / 0.45) 0%,
-    rgb(19 14 26 / 0.34) 22%,
-    rgb(19 14 26 / 0.26) 44%,
-    rgb(19 14 26 / 0.14) 66%,
-    rgb(19 14 26 / 0.05) 84%,
+    rgb(var(--scrim-rgb) / 0.45) 0%,
+    rgb(var(--scrim-rgb) / 0.34) 22%,
+    rgb(var(--scrim-rgb) / 0.26) 44%,
+    rgb(var(--scrim-rgb) / 0.14) 66%,
+    rgb(var(--scrim-rgb) / 0.05) 84%,
     transparent 100%
   );
 }
@@ -271,11 +327,11 @@ a {
   opacity: 0;
   background: linear-gradient(
     to top,
-    rgb(19 14 26) 0%,
-    rgb(19 14 26 / 0.87) 22%,
-    rgb(19 14 26 / 0.6) 44%,
-    rgb(19 14 26 / 0.33) 66%,
-    rgb(19 14 26 / 0.12) 84%,
+    rgb(var(--scrim-rgb)) 0%,
+    rgb(var(--scrim-rgb) / 0.87) 22%,
+    rgb(var(--scrim-rgb) / 0.6) 44%,
+    rgb(var(--scrim-rgb) / 0.33) 66%,
+    rgb(var(--scrim-rgb) / 0.12) 84%,
     transparent 100%
   );
 }
@@ -313,79 +369,89 @@ a {
 }
 
 /* invisible strip along the viewport's top edge — hovering it summons
-   the tucked-away pill */
-.site-header::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 28px;
-  pointer-events: auto;
+   the tucked-away pill. Pointer devices only: on touch it would just
+   swallow taps near the top of the screen. */
+@media (hover: hover) and (pointer: fine) {
+  .site-header::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 28px;
+    pointer-events: auto;
+  }
 }
 
 .site-header__bar {
+  position: relative;
+  isolation: isolate;
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
   padding: 8px 18px;
-  border: 1px solid var(--border);
   border-radius: var(--radius-pill);
-  background: var(--glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
   pointer-events: auto;
   transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.3s;
 }
 
-/* Scroll position scrubs --tuck between 0 (top of page) and 1 (scrolled).
-   The pill's transform/opacity DERIVE from --tuck as normal declarations,
-   so hover can change them with real transitions in both directions —
-   no snapping, which an animation-owned transform would cause. */
-@property --tuck {
-  syntax: '<number>';
-  inherits: true;
-  initial-value: 0;
+/* The capsule lives on a pseudo-element so it can fade in as a whole
+   (gradients can't transition). Invisible at the top of the page — the
+   links float bare over the hero — and fades in once you scroll.
+   Near-opaque matte-charcoal gradient echoing the wallpaper's sheen;
+   nothing scrolling beneath ever reads through it. */
+.site-header__bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: var(--radius-pill);
+  background: var(--capsule);
+  border: 1px solid var(--border);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
-@supports (animation-timeline: scroll()) {
-  /* pointer devices: tuck the pill away as you keep scrolling; hovering
-     the top edge (or tabbing into the nav) brings it back and HOLDS it
-     as long as the pointer stays on the pill */
-  @media (hover: hover) and (pointer: fine) {
-    .site-header {
-      animation: header-tuck linear both;
-      animation-timeline: scroll();
-      animation-range: 160px 340px;
-    }
+.site-header--solid .site-header__bar::before {
+  opacity: 1;
+}
 
-    .site-header:hover,
-    .site-header:focus-within {
-      --tuck: 0 !important;
-    }
+/* Scroll-direction tuck (tiny listener in Base.astro, all devices):
+   scrolling down slides the pill away, any scroll-up brings it back. */
+.site-header--tucked .site-header__bar {
+  transform: translateY(-100px);
+  opacity: 0;
+}
 
-    .site-header__bar {
-      transform: translateY(calc(var(--tuck, 0) * -100px));
-      opacity: calc(1 - var(--tuck, 0));
-      /* the delay keeps the pill up while the pointer crosses the small
-         gap between the top edge and the pill itself */
-      transition:
-        transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s,
-        opacity 0.28s linear 0.15s;
-    }
+/* keyboard focus always reveals the pill */
+.site-header:focus-within .site-header__bar {
+  transform: none;
+  opacity: 1;
+}
 
-    .site-header:hover .site-header__bar,
-    .site-header:focus-within .site-header__bar {
-      transition-delay: 0s, 0s;
-    }
+/* pointer devices additionally summon it by hovering the top edge, and
+   hold it while the pointer stays on the pill */
+@media (hover: hover) and (pointer: fine) {
+  .site-header:hover .site-header__bar {
+    transform: none;
+    opacity: 1;
   }
-}
 
-@keyframes header-tuck {
-  to {
-    --tuck: 1;
+  /* delay only the hide, so the pointer can cross the small gap between
+     the top-edge strip and the pill without it flickering away */
+  .site-header--tucked .site-header__bar {
+    transition-delay: 0.15s, 0.15s;
+  }
+
+  .site-header:hover .site-header__bar,
+  .site-header:focus-within .site-header__bar {
+    transition-delay: 0s, 0s;
   }
 }
 
@@ -413,7 +479,148 @@ a {
 .site-header__nav a:hover,
 .site-header__nav a[aria-current='page'] {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--glass-hover);
+}
+
+/* ------------------------------------------------------ theme switcher */
+.theme-menu {
+  position: relative;
+  margin-left: 2px;
+}
+
+.theme-menu__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px;
+  border: 0;
+  background: none;
+  border-radius: var(--radius-pill);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.theme-menu__btn:hover,
+.theme-menu__btn[aria-expanded='true'] {
+  color: var(--text);
+  background: var(--glass-hover);
+}
+
+.theme-menu__btn svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+
+.theme-menu__pop {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 132px;
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--capsule);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  display: grid;
+  gap: 2px;
+}
+
+.theme-menu__pop[hidden] {
+  display: none;
+}
+
+.theme-menu__pop button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  background: none;
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.15s, background 0.15s;
+}
+
+.theme-menu__pop button:hover {
+  color: var(--text);
+  background: var(--glass-hover);
+}
+
+/* radio-style dot; fills with accent on the active theme */
+.theme-menu__pop button::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text-faint);
+  flex: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.theme-menu__pop button[aria-pressed='true'] {
+  color: var(--text);
+}
+
+.theme-menu__pop button[aria-pressed='true']::before {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.theme-menu__hint {
+  margin-top: 2px;
+  padding: 6px 10px 3px;
+  border-top: 1px dashed var(--border);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--text-faint);
+}
+
+/* theme toast — drops in from the top, just under the nav pill */
+.theme-toast {
+  position: fixed;
+  top: 76px;
+  left: 50%;
+  z-index: 10;
+  padding: 7px 16px;
+  background: var(--capsule);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -8px);
+  transition: opacity 0.2s, transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.theme-toast--show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* the one-time `press t` tip sits in the top-right corner, under the
+   theme button it's pointing visitors toward */
+.theme-toast--tip {
+  left: auto;
+  right: 20px;
+  transform: translateY(-8px);
+}
+
+.theme-toast--tip.theme-toast--show {
+  transform: translateY(0);
 }
 
 /* ---------------------------------------------------------------- intro */
@@ -421,19 +628,65 @@ a {
   padding-block: 72px 28px;
 }
 
+/* name + headline on the left, mono facts block on the right */
+.intro__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 26px 56px;
+  align-items: center;
+  margin-top: 10px;
+}
+
 .intro h1 {
   font-size: 2.1rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  margin-top: 10px;
 }
 
 .intro__headline {
-  margin-top: 26px;
+  margin-top: 22px;
   font-size: 1.35rem;
   line-height: 1.5;
   font-weight: 500;
   color: var(--text);
+}
+
+/* quiet manifest: key-value credentials, mono, behind a dashed rule that
+   echoes the row dividers used across the site */
+.intro__facts {
+  display: grid;
+  gap: 10px;
+  padding-left: 24px;
+  border-left: 1px dashed var(--border-strong);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+
+.intro__facts > div {
+  display: grid;
+  grid-template-columns: 46px auto;
+  gap: 14px;
+}
+
+.intro__facts dt {
+  color: var(--accent);
+}
+
+.intro__facts dd {
+  margin: 0;
+  color: var(--text-dim);
+}
+
+.intro__facts a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  text-underline-offset: 3px;
+}
+
+.intro__facts a:hover {
+  color: var(--accent-bright);
+  text-decoration-color: var(--accent-bright);
 }
 
 .intro__sub {
@@ -441,36 +694,22 @@ a {
   align-items: baseline;
   flex-wrap: wrap;
   gap: 8px 12px;
-  margin-top: 24px;
+  margin-top: 26px;
   font-family: var(--mono);
   font-size: 0.8rem;
   color: var(--text-dim);
 }
 
-.intro__prev {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 8px 12px;
-  margin-top: 14px;
-  font-size: 0.92rem;
-  color: var(--text-dim);
-}
-
-.intro__sub .dot,
-.intro__prev .dot {
+.intro__sub .dot {
   color: var(--text-faint);
 }
 
-.intro__prev a {
-  color: var(--text);
-  text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--text) 35%, transparent);
-  text-underline-offset: 3px;
-}
-
-.intro__prev a:hover {
-  color: var(--accent-bright);
+/* facts drop below the name once the hero gets narrow */
+@media (max-width: 780px) {
+  .intro__grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
 }
 
 .intro__links {
@@ -543,6 +782,14 @@ a {
   font-weight: 400;
   letter-spacing: 0.08em;
   color: var(--text-dim);
+}
+
+/* terminal prompt — identical accent `$ ` before the hero's whoami and
+   every section title */
+.kicker--prompt::before,
+.section-label h2::before {
+  content: '$ ';
+  color: var(--accent);
 }
 
 .section-label a {
@@ -753,18 +1000,12 @@ a {
     font-size: 0.82rem;
   }
 
-  /* compact hero meta: drop descriptor words, tighten the dot rows */
-  .intro__desc {
-    display: none;
-  }
-
   /* let the headline wrap naturally instead of the desktop line break */
   .intro__headline br {
     display: none;
   }
 
   .intro__sub,
-  .intro__prev,
   .intro__links {
     gap: 6px 10px;
   }
@@ -1007,7 +1248,7 @@ a.post-line:hover {
 .prose ul,
 .prose ol {
   margin-bottom: 1.15em;
-  color: #dedee8;
+  color: var(--prose-text);
 }
 
 .prose ul,
@@ -1072,15 +1313,15 @@ a.post-line:hover {
 }
 
 .prose :not(pre) > code {
-  background: rgba(30, 23, 42, 0.45);
+  background: var(--code-chip-bg);
   border: 1px solid var(--border);
   border-radius: 5px;
   padding: 0.12em 0.38em;
-  color: var(--accent-bright);
+  color: var(--code-chip-text);
 }
 
 .prose pre {
-  background: rgba(10, 9, 14, 0.5) !important;
+  background: var(--pre-bg) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border);
@@ -1196,6 +1437,8 @@ a.post-line:hover {
   margin-block: 0;
 }
 
+/* fixed dark-surface colors: this button sits on the code block, which
+   stays dark in every theme (including the light sand theme) */
 .code-copy {
   position: absolute;
   top: 10px;
@@ -1203,11 +1446,11 @@ a.post-line:hover {
   padding: 4px 12px;
   font-family: var(--mono);
   font-size: 0.7rem;
-  color: var(--text-dim);
+  color: #b8b8c4;
   background: rgba(48, 44, 58, 0.85);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--border-strong);
+  border: 1px solid rgba(255, 255, 255, 0.17);
   border-radius: var(--radius-pill);
   cursor: pointer;
   opacity: 0;
@@ -1220,13 +1463,13 @@ a.post-line:hover {
 }
 
 .code-copy:hover {
-  color: var(--text);
-  border-color: var(--text-faint);
+  color: #f4f4f9;
+  border-color: #9c9ca8;
 }
 
 .code-copy--done {
-  color: var(--accent);
-  border-color: var(--accent);
+  color: #a8a3f7;
+  border-color: #a8a3f7;
   opacity: 1;
 }
 
@@ -1237,6 +1480,8 @@ a.post-line:hover {
 }
 
 /* -------------------------------------------------- reading progress */
+/* Full-width line at the very top; its color follows the active theme
+   (--progress, set per theme — defaults to the accent). */
 .read-progress {
   position: fixed;
   top: 0;
@@ -1244,7 +1489,7 @@ a.post-line:hover {
   right: 0;
   height: 2px;
   z-index: 10;
-  background: var(--accent);
+  background: var(--progress);
   transform-origin: 0 50%;
   transform: scaleX(0);
 }
@@ -1299,7 +1544,7 @@ a.post-line:hover {
   bottom: -4.5px;
   width: 8px;
   height: 8px;
-  background: rgb(42, 39, 50);
+  background: var(--bg-raised);
   border-right: 1px solid var(--border-strong);
   border-bottom: 1px solid var(--border-strong);
   transform: translateX(-50%) rotate(45deg);
