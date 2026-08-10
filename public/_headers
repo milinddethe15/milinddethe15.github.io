@@ -1,0 +1,26 @@
+# Cloudflare Pages headers — security baseline + long-lived asset caching.
+# HTML is left on Pages' default (etag revalidation) so deploys show up
+# immediately.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=31536000
+
+# fonts never change (stable filenames, subset frozen)
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# wallpapers/icons are NOT content-hashed and do get swapped — keep them
+# fresh daily, serve stale while revalidating
+/images/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/gifs/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# Astro's content-hashed bundles are safe to cache forever
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

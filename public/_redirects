@@ -1,0 +1,4 @@
+# Server-side redirects on Cloudflare Pages (replaces the meta-refresh
+# fallback pages, which remain for other hosts).
+/resume https://drive.google.com/file/d/1BbZS8mHuxcgBiR5ZlOw5_cPORrJ6X3wj/view?usp=sharing 302
+/resume/ https://drive.google.com/file/d/1BbZS8mHuxcgBiR5ZlOw5_cPORrJ6X3wj/view?usp=sharing 302
