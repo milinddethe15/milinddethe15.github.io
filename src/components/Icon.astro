@@ -2,7 +2,7 @@
 // Inline SVG icons — replaces the Font Awesome webfonts (~200KB) with
 // a few hundred bytes per page. Brand paths from simpleicons.org.
 interface Props {
-  name: 'github' | 'linkedin' | 'x' | 'email' | 'cv' | 'arrow' | 'note' | 'rss' | 'back';
+  name: 'github' | 'linkedin' | 'x' | 'email' | 'arrow' | 'rss' | 'back' | 'theme';
   class?: string;
 }
 const { name, class: className } = Astro.props;
@@ -15,11 +15,12 @@ const paths: Record<string, string> = {
   x: 'M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z',
   email:
     'M1.5 4.5h21a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5h-21A1.5 1.5 0 0 1 0 18V6a1.5 1.5 0 0 1 1.5-1.5zm10.5 8.19 9.9-6.19H2.1l9.9 6.19zM2.25 8.963V17.25h19.5V8.963l-9.75 6.093-9.75-6.093z',
-  cv: 'M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm7 1.5L18.5 9H13V3.5zM8 13h8v1.5H8V13zm0 4h8v1.5H8V17z',
-  note: 'M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm7 1.5L18.5 9H13V3.5z',
   arrow: 'M5 19 17.6 6.4M7 5h12v12',
   rss: 'M4 4a16 16 0 0 1 16 16h-3A13 13 0 0 0 4 7V4zm0 7a9 9 0 0 1 9 9h-3a6 6 0 0 0-6-6v-3zm2 5.5A1.5 1.5 0 1 1 4.5 18 1.5 1.5 0 0 1 6 16.5z',
   back: 'M19 12H5m6-6-6 6 6 6',
+  /* half-filled circle — theme/appearance toggle */
+  theme:
+    'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16zm0 1.5v13a6.5 6.5 0 0 1 0-13z',
 };
 
 const stroked = name === 'arrow' || name === 'back';

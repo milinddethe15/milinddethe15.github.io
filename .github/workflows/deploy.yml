@@ -29,6 +29,9 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+        env:
+          # authenticated GitHub API calls (merged-PR count) during build
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

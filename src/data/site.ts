@@ -14,17 +14,6 @@ export const SITE = {
   gaId: 'G-73ZGWNVCPE',
 };
 
-export const STACK = [
-  'Kubernetes',
-  'AWS',
-  'Go',
-  'Terraform',
-  'ArgoCD',
-  'Prometheus',
-  'Grafana',
-  'Helm',
-];
-
 export interface Project {
   title: string;
   description: string;
