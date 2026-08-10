@@ -295,6 +295,20 @@ const current = Astro.url.pathname;
             setTimeout(() => showToast('press t to switch themes', 3500, true), 1200);
           }
         } catch {}
+        // after the page settles, warm the cache with the other themes'
+        // wallpapers (~130KB total) so switching swaps instantly
+        addEventListener('load', () => {
+          if (navigator.connection?.saveData) return;
+          const warm = () => {
+            THEMES.filter((n) => n !== current()).forEach((n) => {
+              const img = new Image();
+              img.fetchPriority = 'low';
+              img.src = '/images/bg-' + n + '.webp';
+            });
+          };
+          if ('requestIdleCallback' in window) requestIdleCallback(warm, { timeout: 3000 });
+          else setTimeout(warm, 800);
+        });
       }
     </script>
 
