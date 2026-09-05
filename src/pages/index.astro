@@ -45,15 +45,22 @@ const hasSectionsBelow = posts.length > 0 || projects.length > 0 || EXPERIENCE.l
       }
       {
         author.info.length > 0 && (
-          <p class="mt-3 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-base opacity-80 sm:text-lg [&_a]:link-dotted [&_code]:rounded [&_code]:border [&_code]:border-border [&_code]:bg-surface [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em]">
-            {author.info.map((line, i) => (
+          <p class="mt-3 text-base leading-relaxed text-balance opacity-80 sm:text-lg [&_a]:link-dotted [&_code]:rounded [&_code]:border [&_code]:border-border [&_code]:bg-surface [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em]">
+            {/* Inline rather than flex so `text-balance` can even out the rows.
+                Each fact carries its separator and never wraps internally, so a
+                row breaks only at the space between facts — never mid-fact, and
+                never opening with a stray dot. */}
+            {author.info.map((fact, i) => (
               <>
-                {i > 0 && (
-                  <span aria-hidden="true" class="opacity-40">
-                    ·
-                  </span>
-                )}
-                <span set:html={inlineMarkdown(line)} />
+                {i > 0 && ' '}
+                <span class="whitespace-nowrap">
+                  <span set:html={inlineMarkdown(fact)} />
+                  {i < author.info.length - 1 && (
+                    <span aria-hidden="true" class="ml-1.5 opacity-40">
+                      ·
+                    </span>
+                  )}
+                </span>
               </>
             ))}
           </p>
