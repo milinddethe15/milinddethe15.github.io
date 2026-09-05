@@ -140,7 +140,7 @@ export const RESUME_URL =
 
 export const siteConfig: SiteConfig = {
   name: '@milinddethe15',
-  title: 'Milind Dethe',
+  title: '@milinddethe15',
   description:
     'Platform and DevOps engineer working on Kubernetes, AWS, and cloud-native infrastructure. CKA certified. Ex-Atlan, LFX mentee at CNCF Thanos, Kubeflow contributor.',
   url: 'https://milinddethe15.tech',
