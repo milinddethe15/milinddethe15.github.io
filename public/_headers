@@ -9,10 +9,6 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Strict-Transport-Security: max-age=31536000
 
-# fonts never change (stable filenames, subset frozen)
-/fonts/*
-  Cache-Control: public, max-age=31536000, immutable
-
 # wallpapers/icons are NOT content-hashed and do get swapped — keep them
 # fresh daily, serve stale while revalidating
 /images/*

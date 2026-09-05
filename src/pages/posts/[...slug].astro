@@ -1,0 +1,29 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import PostLayout from '@/layouts/PostLayout.astro';
+import { siteConfig } from '@/config/site';
+import { getPosts, getAdjacentPosts, getSeriesPosts } from '@/lib/content';
+import Callout from '@/components/ui/Callout.astro';
+import Tabs from '@/components/ui/Tabs.astro';
+
+export const getStaticPaths = (async () => {
+  if (!siteConfig.features.posts) return [];
+  const posts = await getPosts();
+  return posts
+    .filter((post) => !post.data.externalLink)
+    .map((post) => ({
+      params: { slug: post.id },
+      props: { post },
+    }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const { prev, next } = await getAdjacentPosts(post);
+const seriesPosts = await getSeriesPosts(post);
+---
+
+<PostLayout post={post} headings={headings} prev={prev} next={next} seriesPosts={seriesPosts}>
+  <Content components={{ Callout, Tabs }} />
+</PostLayout>

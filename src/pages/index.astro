@@ -1,187 +1,154 @@
 ---
-import { getCollection } from 'astro:content';
-import Base from '../layouts/Base.astro';
-import Icon from '../components/Icon.astro';
-import { SITE, PROJECTS, EXPERIENCE, OSS, OSS_ALL_URL } from '../data/site';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { siteConfig } from '@/config/site';
+import { personSchema } from '@/lib/seo';
+import { url, inlineMarkdown } from '@/lib/utils';
+import { getRecentPosts, getFeaturedProjects } from '@/lib/content';
+import { EXPERIENCE, OSS, OSS_ALL_URL, fetchMergedPrCount } from '@/data/resume';
+import SocialLinks from '@/components/layout/SocialLinks.astro';
+import Section from '@/components/ui/Section.astro';
+import PostRow from '@/components/posts/PostRow.astro';
+import ProjectCard from '@/components/projects/ProjectCard.astro';
+import Icon from '@/components/ui/Icon.astro';
 
-const posts = (await getCollection('posts'))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 6);
-
-// Merged-PR count fetched once per build; falls back to the last known
-// count if the GitHub API is unreachable.
-let ossCount = 61;
-try {
-  const res = await fetch(
-    'https://api.github.com/search/issues?per_page=1&q=' +
-      encodeURIComponent('is:pr is:merged author:milinddethe15 -user:milinddethe15'),
-    {
-      headers: {
-        Accept: 'application/vnd.github+json',
-        'User-Agent': 'milinddethe15.tech-build',
-        ...(process.env.GITHUB_TOKEN
-          ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
-          : {}),
-      },
-    }
-  );
-  if (res.ok) ossCount = (await res.json()).total_count ?? ossCount;
-} catch {}
-
-const fmt = (d: Date) =>
-  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-const personLd = JSON.stringify({
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: SITE.name,
-  url: 'https://milinddethe15.tech/',
-  image: 'https://milinddethe15.tech/images/dp.jpg',
-  jobTitle: 'Platform / DevOps Engineer',
-  sameAs: [SITE.github, SITE.linkedin, SITE.x],
-});
+const { author, home, features } = siteConfig;
+const posts = features.posts && home.recentPosts > 0 ? await getRecentPosts(home.recentPosts) : [];
+const projects =
+  features.projects && home.featuredProjects > 0
+    ? await getFeaturedProjects(home.featuredProjects)
+    : [];
+const mergedPrs = await fetchMergedPrCount();
+const hasSectionsBelow = posts.length > 0 || projects.length > 0 || EXPERIENCE.length > 0;
 ---
 
-<Base>
-  <section class="container narrow intro">
-    <p class="kicker kicker--prompt" aria-hidden="true">whoami</p>
-    <div class="intro__grid">
-      <div>
-        <h1>Milind Dethe</h1>
-        <p class="intro__headline">
-          Building boring, reliable infrastructure<br />
-          for the cloud-native world.
-        </p>
-      </div>
-      <dl class="intro__facts">
-        <div>
-          <dt>edu</dt>
-          <dd><a href="https://www.iitkgp.ac.in/" rel="noopener" target="_blank">IIT KGP</a> '26</dd>
-        </div>
-        <div>
-          <dt>prev</dt>
-          <dd><a href="https://atlan.com" rel="noopener" target="_blank">Atlan</a> · platform</dd>
-        </div>
-        <div>
-          <dt>oss</dt>
-          <dd>
-            LFX '24 <a href="https://thanos.io" rel="noopener" target="_blank">Thanos</a> ·
-            <a href="https://github.com/kubeflow" rel="noopener" target="_blank">Kubeflow</a>
-          </dd>
-        </div>
-        <div>
-          <dt>cert</dt>
-          <dd>
-            <a href="https://www.cncf.io/training/certification/cka/" rel="noopener" target="_blank"
-              >CKA</a
-            > · Aug 2026
-          </dd>
-        </div>
-      </dl>
-    </div>
-    <p class="intro__sub">
-      <span>platform</span>
-      <span class="dot">·</span>
-      <span>devops</span>
-      <span class="dot">·</span>
-      <span>kubernetes</span>
-      <span class="dot">·</span>
-      <span>ai infra</span>
-    </p>
-    <p class="intro__links">
-      <a href={SITE.resume} rel="noopener" target="_blank"
-        >resume <Icon name="arrow" class="arrow-icon" /></a
-      >
-      <span>·</span>
-      <a href={`mailto:${SITE.email}`}>email</a>
-      <span>·</span>
-      <a href={SITE.github} rel="me noopener" target="_blank">github</a>
-      <span>·</span>
-      <a href={SITE.linkedin} rel="me noopener" target="_blank">linkedin</a>
-      <span>·</span>
-      <a href={SITE.x} rel="me noopener" target="_blank">x/twitter</a>
-    </p>
-  </section>
+<BaseLayout jsonLd={[personSchema()]}>
+  <div class="container-page">
+    {/* Hero — fills the viewport below the sticky header; everything else lives under the fold */}
+    <section
+      class="animate-fade-up relative flex min-h-[calc(100dvh-3.5rem)] flex-col items-center justify-center py-16 text-center"
+    >
+      <img
+        src={url(author.avatar)}
+        alt={`Portrait of ${author.name}`}
+        width="160"
+        height="160"
+        fetchpriority="high"
+        class="size-28 rounded-full border border-border bg-surface object-cover transition-transform hover:scale-[1.02] sm:size-36"
+      />
+      <h1 class="mt-8 text-[clamp(1.9rem,5vw,3.1rem)] text-balance">{author.name}</h1>
+      {
+        author.tagline && (
+          <p class="mt-4 max-w-[26ch] text-lg leading-snug text-balance opacity-90 sm:max-w-none sm:text-xl">
+            {author.tagline}
+          </p>
+        )
+      }
+      {
+        author.info.length > 0 && (
+          <p class="mt-3 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-base opacity-80 sm:text-lg [&_a]:link-dotted [&_code]:rounded [&_code]:border [&_code]:border-border [&_code]:bg-surface [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em]">
+            {author.info.map((line, i) => (
+              <>
+                {i > 0 && (
+                  <span aria-hidden="true" class="opacity-40">
+                    ·
+                  </span>
+                )}
+                <span set:html={inlineMarkdown(line)} />
+              </>
+            ))}
+          </p>
+        )
+      }
 
-  <section class="container section narrow" aria-label="Experience">
-    <div class="section-label">
-      <h2>experience</h2>
-    </div>
+      <SocialLinks class="mt-8" />
+
+      {
+        hasSectionsBelow && (
+          <a
+            href="#below-the-fold"
+            aria-label="Scroll to content"
+            class="scroll-cue absolute bottom-5 left-1/2 -translate-x-1/2 opacity-40 transition-opacity hover:opacity-100 focus-visible:opacity-100"
+          >
+            <Icon name="chevron-down" size={22} />
+          </a>
+        )
+      }
+    </section>
+
+    <div id="below-the-fold" class="scroll-mt-14"></div>
+
     {
-      EXPERIENCE.map((e) => (
-        <div class="exp-row">
-          <div class="exp-row__when">{e.when}</div>
-          <div>
-            <h3>
-              <a href={e.url} rel="noopener" target="_blank">
-                {e.org}
-              </a>{' '}
-              <span>— {e.role}</span>
-            </h3>
-            <p>{e.detail}</p>
+      EXPERIENCE.length > 0 && (
+        <Section title="experience" class="mt-10 sm:mt-14">
+          <ul>
+            {EXPERIENCE.map((role) => (
+              <li class="border-b border-dashed border-border py-4 last:border-b-0 sm:grid sm:grid-cols-[9.5rem_1fr] sm:gap-6">
+                <p class="text-[0.8125rem] whitespace-nowrap opacity-50 sm:pt-1">{role.when}</p>
+                <div class="mt-1 sm:mt-0">
+                  <h3 class="font-sans text-base font-medium tracking-[0.01em]">
+                    <a
+                      href={role.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="link-dotted"
+                    >
+                      {role.org}
+                    </a>
+                    <span class="opacity-60"> — {role.role}</span>
+                  </h3>
+                  <p class="mt-1.5 text-[0.9375rem] leading-relaxed opacity-75">{role.detail}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )
+    }
+
+    {
+      projects.length > 0 && (
+        <Section title="selected projects" href="/projects">
+          <div class="grid gap-5 sm:grid-cols-2">
+            {projects.map((project) => (
+              <ProjectCard project={project} />
+            ))}
           </div>
-        </div>
-      ))
+        </Section>
+      )
     }
-  </section>
 
-  <section class="container section narrow" aria-label="Projects" style="padding-top: 0;">
-    <div class="section-label">
-      <h2>projects</h2>
-      <a href="/projects/">see all <Icon name="arrow" class="arrow-icon" /></a>
-    </div>
     {
-      // homepage shows real repos only; the blog-series entries
-      // (internal /tags/ links) live on the full projects page
-      PROJECTS.filter((p) => p.source.startsWith('http')).map((p) => (
-        <a
-          class="proj-row"
-          href={p.source}
-          rel={p.source.startsWith('http') ? 'noopener' : undefined}
-          target={p.source.startsWith('http') ? '_blank' : undefined}
-        >
-          <span class="proj-row__top">
-            <span class="proj-row__name">{p.title}</span>
-            <span class="proj-row__skills">{p.skills.map((s) => s.toLowerCase()).join(' · ')}</span>
-          </span>
-          <span class="proj-row__desc">{p.description}</span>
-        </a>
-      ))
+      OSS.length > 0 && (
+        <Section title="open source" href={OSS_ALL_URL} linkLabel={`${mergedPrs} merged upstream`}>
+          <ul>
+            {OSS.map((pr) => (
+              <li class="border-b border-dashed border-border last:border-b-0">
+                <a
+                  href={pr.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 py-3 transition-opacity hover:opacity-60"
+                >
+                  <span class="text-[0.9375rem] font-medium">{pr.title}</span>
+                  <span class="font-mono text-xs opacity-50">{pr.repo}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )
     }
-  </section>
 
-  <section class="container section narrow" aria-label="Open source" style="padding-top: 0;">
-    <div class="section-label">
-      <h2>open source</h2>
-      <a href={OSS_ALL_URL} rel="noopener" target="_blank">
-        {ossCount} merged upstream <Icon name="arrow" class="arrow-icon" />
-      </a>
-    </div>
     {
-      OSS.map((o) => (
-        <a class="oss-row" href={o.url} rel="noopener" target="_blank">
-          <span class="oss-row__dot" aria-hidden="true" />
-          <span class="oss-row__title">{o.title}</span>
-          <span class="oss-row__repo">{o.repo}</span>
-        </a>
-      ))
+      posts.length > 0 && (
+        <Section title="latest posts" href="/posts">
+          <ul>
+            {posts.map((post) => (
+              <PostRow post={post} />
+            ))}
+          </ul>
+        </Section>
+      )
     }
-  </section>
-
-  <section class="container section narrow" aria-label="Writing" style="padding-top: 0;">
-    <div class="section-label">
-      <h2>writing</h2>
-      <a href="/posts/">see all <Icon name="arrow" class="arrow-icon" /></a>
-    </div>
-    {
-      posts.map((post) => (
-        <a class="post-line" href={`/posts/${post.id}/`}>
-          <span>{post.data.title}</span>
-          <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
-        </a>
-      ))
-    }
-  </section>
-
-  <script is:inline type="application/ld+json" set:html={personLd} />
-</Base>
+  </div>
+</BaseLayout>

@@ -3,6 +3,7 @@ title: "Day 4: Training One Model Is Easy. Finding The Best One Is Hard."
 date: 2026-06-16
 description: "Learn how machine learning teams improve model performance using cross validation, hyperparameter tuning, AutoML, and parallel experimentation."
 tags: ["7-days-of-mlops"]
+series: "7 Days of MLOps"
 ---
 Yesterday I learned how machine learning teams version datasets and track experiments.
 

@@ -2,3 +2,6 @@
 # fallback pages, which remain for other hosts).
 /resume https://drive.google.com/file/d/1BbZS8mHuxcgBiR5ZlOw5_cPORrJ6X3wj/view?usp=sharing 302
 /resume/ https://drive.google.com/file/d/1BbZS8mHuxcgBiR5ZlOw5_cPORrJ6X3wj/view?usp=sharing 302
+
+# the feed moved from Hugo's path to the theme's — keep old subscribers
+/index.xml /rss.xml 301

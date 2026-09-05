@@ -1,0 +1,40 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  currentPage: number;
+  lastPage: number;
+  prevUrl?: string;
+  nextUrl?: string;
+}
+
+const { currentPage, lastPage, prevUrl, nextUrl } = Astro.props;
+const linkClass =
+  'inline-flex h-9 items-center gap-1.5 border border-border bg-surface px-3.5 text-sm lowercase tracking-wide transition-colors hover:border-foreground/60';
+---
+
+{
+  lastPage > 1 && (
+    <nav class="mt-12 flex items-center justify-between" aria-label="Pagination">
+      {prevUrl ? (
+        <a href={prevUrl} class={linkClass} rel="prev">
+          <Icon name="arrow-left" size={14} />
+          Newer
+        </a>
+      ) : (
+        <span />
+      )}
+      <span class="text-xs text-muted-foreground">
+        Page {currentPage} of {lastPage}
+      </span>
+      {nextUrl ? (
+        <a href={nextUrl} class={linkClass} rel="next">
+          Older
+          <Icon name="arrow-right" size={14} />
+        </a>
+      ) : (
+        <span />
+      )}
+    </nav>
+  )
+}

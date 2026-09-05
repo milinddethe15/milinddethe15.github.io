@@ -1,0 +1,138 @@
+---
+import type { MarkdownHeading } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import { siteConfig } from '@/config/site';
+import type { Project } from '@/lib/content';
+import { breadcrumbSchema, absoluteUrl } from '@/lib/seo';
+import { url, isExternal } from '@/lib/utils';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import TableOfContents from '@/components/posts/TableOfContents.astro';
+
+interface Props {
+  project: Project;
+  headings: MarkdownHeading[];
+}
+
+const { project, headings } = Astro.props;
+const { data } = project;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? siteConfig.url).toString();
+const isVideo = data.image ? /\.(webm|mp4)$/i.test(data.image) : false;
+
+const jsonLd = [
+  breadcrumbSchema([
+    { name: 'Home', url: absoluteUrl('/') },
+    { name: 'Projects', url: absoluteUrl('/projects') },
+    { name: data.title, url: canonicalUrl },
+  ]),
+];
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  image={data.image && !isVideo ? data.image : undefined}
+  jsonLd={jsonLd}
+>
+  <div class="container-page py-10 sm:py-14">
+    <Breadcrumbs
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Projects', href: '/projects' },
+        { label: data.title },
+      ]}
+    />
+
+    <header>
+      <p class="mb-3 text-[0.6875rem] tracking-[0.18em] uppercase opacity-55">{data.kicker}</p>
+      <h1 class="text-2xl text-balance sm:text-3xl">{data.title}</h1>
+      <p class="mt-4 max-w-[72ch] text-base leading-relaxed opacity-80 sm:text-lg">
+        {data.description}
+      </p>
+
+      {
+        data.skills.length > 0 && (
+          <ul class="mt-5 flex flex-wrap gap-1.5">
+            {data.skills.map((skill) => (
+              <li class="pill">{skill}</li>
+            ))}
+          </ul>
+        )
+      }
+
+      {
+        (data.sourceCode || data.link) && (
+          <div class="mt-6 flex flex-wrap gap-2.5">
+            {data.link && (
+              <Button href={url(data.link)} external={isExternal(data.link)} size="sm">
+                View project
+                <Icon name="external-link" size={13} />
+              </Button>
+            )}
+            {data.sourceCode && (
+              <Button
+                href={url(data.sourceCode)}
+                external={isExternal(data.sourceCode)}
+                variant="secondary"
+                size="sm"
+              >
+                <Icon name="github" size={13} />
+                Source code
+              </Button>
+            )}
+          </div>
+        )
+      }
+
+      {
+        data.image &&
+          (isVideo ? (
+            <video
+              src={url(data.image)}
+              class="mt-8 w-full rounded-[1.125rem] border border-border object-cover"
+              autoplay
+              muted
+              loop
+              playsinline
+              aria-label={`${data.title} preview`}
+            />
+          ) : (
+            <img
+              src={url(data.image)}
+              alt={`${data.title} preview`}
+              width="1400"
+              height="788"
+              class="mt-8 aspect-video w-full rounded-[1.125rem] border border-border object-cover"
+            />
+          ))
+      }
+    </header>
+
+    <div class="mt-8 xl:hidden">
+      <TableOfContents headings={headings} variant="mobile" />
+    </div>
+
+    <div class="relative">
+      <article class="prose mt-8">
+        <slot />
+      </article>
+
+      <aside class="absolute top-0 left-full ml-10 hidden h-full w-52 xl:block">
+        <div class="sticky top-24">
+          <TableOfContents headings={headings} variant="sidebar" />
+        </div>
+      </aside>
+    </div>
+
+    <div class="mt-12 border-t border-border pt-6">
+      <a
+        href={url('/projects')}
+        class="inline-flex items-center gap-1.5 text-xs font-medium lowercase tracking-wide opacity-60 transition-opacity hover:opacity-100"
+      >
+        <Icon name="arrow-left" size={13} />
+        All projects
+      </a>
+    </div>
+  </div>
+</BaseLayout>

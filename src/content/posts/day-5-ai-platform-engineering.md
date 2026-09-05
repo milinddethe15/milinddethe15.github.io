@@ -3,6 +3,7 @@ title: "Day 5: Why Ray Exists"
 date: 2026-06-08
 description: "Why Ray exists: scheduling computation (tasks & actors) vs infrastructure for distributed AI workloads."
 tags: ["7-days-of-ai-platform-engineering"]
+series: "7 Days of AI Platform Engineering"
 ---
 Over the last few days, I've learned that AI infrastructure introduces challenges that traditional applications rarely face:
 

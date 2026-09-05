@@ -1,0 +1,124 @@
+---
+import type { Project } from '@/lib/content';
+import { hasDetailPage } from '@/lib/content';
+import { url, isExternal } from '@/lib/utils';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const detailHref = hasDetailPage(project) ? url(`/projects/${project.id}`) : null;
+const isVideo = data.image ? /\.(webm|mp4)$/i.test(data.image) : false;
+const externalAttrs = (href: string) =>
+  isExternal(href) ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+---
+
+<article
+  class="flex h-full flex-col overflow-hidden rounded-[1.125rem] border border-border bg-surface transition-transform hover:-translate-y-0.5"
+>
+  {
+    data.image && (
+      <div class="border-b border-border">
+        {isVideo ? (
+          <video
+            src={url(data.image)}
+            class="block aspect-video w-full object-cover"
+            autoplay
+            muted
+            loop
+            playsinline
+            aria-label={`${data.title} preview`}
+          />
+        ) : detailHref ? (
+          <a href={detailHref} tabindex="-1" aria-hidden="true">
+            <img
+              src={url(data.image)}
+              alt=""
+              width="1280"
+              height="720"
+              loading="lazy"
+              decoding="async"
+              class="block aspect-video w-full object-cover"
+            />
+          </a>
+        ) : (
+          <img
+            src={url(data.image)}
+            alt={`${data.title} preview`}
+            width="1280"
+            height="720"
+            loading="lazy"
+            decoding="async"
+            class="block aspect-video w-full object-cover"
+          />
+        )}
+      </div>
+    )
+  }
+
+  <div class="flex flex-1 flex-col gap-3 p-5">
+    <p class="text-[0.6875rem] tracking-[0.18em] uppercase opacity-55">{data.kicker}</p>
+    <h3 class="font-sans text-xl leading-snug font-medium tracking-[0.01em]">
+      {
+        detailHref ? (
+          <a href={detailHref} class="transition-opacity hover:opacity-70">
+            {data.title}
+          </a>
+        ) : (
+          data.title
+        )
+      }
+    </h3>
+    <p class="text-[0.9375rem] leading-relaxed opacity-80">{data.description}</p>
+
+    {
+      data.skills.length > 0 && (
+        <ul class="flex flex-wrap gap-1.5">
+          {data.skills.map((skill) => (
+            <li class="pill">{skill}</li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      (data.sourceCode || data.link || detailHref) && (
+        <div class="mt-auto flex flex-wrap gap-2 pt-2">
+          {data.link && (
+            <a
+              href={url(data.link)}
+              class="inline-flex items-center gap-2 rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-[0.01em] transition-[transform,border-color] hover:-translate-y-px hover:border-foreground/60"
+              {...externalAttrs(data.link)}
+            >
+              <Icon name="external-link" size={13} />
+              View project
+            </a>
+          )}
+          {data.sourceCode && (
+            <a
+              href={url(data.sourceCode)}
+              class="inline-flex items-center gap-2 rounded-full border border-border px-3.5 py-1.5 text-xs font-medium tracking-[0.01em] opacity-75 transition-[transform,opacity] hover:-translate-y-px hover:opacity-100"
+              {...externalAttrs(data.sourceCode)}
+            >
+              <Icon name="github" size={14} />
+              Source code
+            </a>
+          )}
+          {detailHref && (
+            <a
+              href={detailHref}
+              aria-label={`${data.title} case study`}
+              class="inline-flex items-center gap-1.5 rounded-full border border-transparent px-2 py-1.5 text-xs font-medium tracking-[0.01em] opacity-70 transition-opacity hover:opacity-100"
+            >
+              Case study
+              <Icon name="arrow-right" size={12} />
+            </a>
+          )}
+        </div>
+      )
+    }
+  </div>
+</article>

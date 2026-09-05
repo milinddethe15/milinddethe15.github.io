@@ -1,0 +1,23 @@
+---
+import { siteConfig } from '@/config/site';
+import { slugify, url } from '@/lib/utils';
+
+interface Props {
+  tag: string;
+  /** Show post count next to the tag */
+  count?: number;
+}
+
+const { tag, count } = Astro.props;
+---
+
+{
+  siteConfig.features.tags ? (
+    <a href={url(`/tags/${slugify(tag)}`)} class="chip">
+      {tag}
+      {count !== undefined && <span class="opacity-60">{count}</span>}
+    </a>
+  ) : (
+    <span class="chip">{tag}</span>
+  )
+}

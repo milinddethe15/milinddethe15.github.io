@@ -3,6 +3,7 @@ title: "Day 1: Why DevOps Is Not Enough for Machine Learning"
 date: 2026-06-13
 description: "Why DevOps alone is not enough for machine learning and how MLOps addresses data, models, and training-serving skew."
 tags: ["7-days-of-mlops"]
+series: "7 Days of MLOps"
 ---
 Over the last [7 days](/tags/7-days-of-ai-platform-engineering/), I explored AI Platform Engineering.
 

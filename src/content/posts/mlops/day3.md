@@ -3,6 +3,7 @@ title: "Day 3: If Git Versions Code, What Versions Data?"
 date: 2026-06-15
 description: "Learn why machine learning teams need data versioning and experiment tracking, and how tools like DVC and MLflow help make experiments reproducible."
 tags: ["7-days-of-mlops"]
+series: "7 Days of MLOps"
 ---
 Yesterday I learned that reproducibility is one of the foundations of MLOps.
 

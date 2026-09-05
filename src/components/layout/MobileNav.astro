@@ -1,0 +1,80 @@
+---
+import { siteConfig } from '@/config/site';
+import { url, isExternal } from '@/lib/utils';
+import Icon from '@/components/ui/Icon.astro';
+---
+
+<button
+  type="button"
+  id="mobile-nav-toggle"
+  class="inline-flex size-9 items-center justify-center text-foreground/70 transition-colors hover:text-foreground md:hidden"
+  aria-label="Open navigation menu"
+  aria-expanded="false"
+  aria-controls="mobile-nav-panel"
+>
+  <Icon name="menu" size={18} class="menu-icon" />
+  <Icon name="close" size={18} class="close-icon hidden" />
+</button>
+
+<div
+  id="mobile-nav-panel"
+  hidden
+  class="absolute inset-x-0 top-14 z-30 border-y border-border bg-background/95 backdrop-blur-md md:hidden"
+>
+  <nav class="container-page flex flex-col py-3" aria-label="Mobile navigation">
+    {
+      siteConfig.theme.purchaseUrl && (
+        <a
+          href={siteConfig.theme.purchaseUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mb-2 inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-foreground bg-foreground text-sm font-semibold tracking-wide text-background"
+        >
+          {siteConfig.theme.purchaseLabel}
+          <Icon name="arrow-right" size={13} />
+        </a>
+      )
+    }
+    {
+      siteConfig.navigation.map((item) => (
+        <a
+          href={url(item.href)}
+          class="py-2.5 text-sm font-medium lowercase tracking-wide text-foreground/80 transition-colors hover:text-foreground"
+          {...(isExternal(item.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+</div>
+
+<script>
+  function initMobileNav() {
+    const toggle = document.getElementById('mobile-nav-toggle');
+    const panel = document.getElementById('mobile-nav-panel');
+    if (!toggle || !panel) return;
+
+    const menuIcon = toggle.querySelector('.menu-icon');
+    const closeIcon = toggle.querySelector('.close-icon');
+
+    function setOpen(open: boolean) {
+      panel!.hidden = !open;
+      toggle!.setAttribute('aria-expanded', String(open));
+      toggle!.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+      menuIcon?.classList.toggle('hidden', open);
+      closeIcon?.classList.toggle('hidden', !open);
+    }
+
+    toggle.addEventListener('click', () => setOpen(Boolean(panel.hidden)));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) setOpen(false);
+    });
+
+    panel.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+  }
+  initMobileNav();
+</script>

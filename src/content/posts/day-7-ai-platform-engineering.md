@@ -3,6 +3,7 @@ title: "Day 7: What Does a Complete AI Platform Actually Look Like?"
 date: 2026-06-10
 description: "A complete AI platform: layers, services, infrastructure, and where tools like vLLM, Ray, and Kubernetes fit together."
 tags: ["7-days-of-ai-platform-engineering"]
+series: "7 Days of AI Platform Engineering"
 ---
 Over the last 6 days, I've learned about:
 

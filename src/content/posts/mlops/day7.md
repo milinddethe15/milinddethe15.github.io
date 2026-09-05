@@ -3,6 +3,7 @@ title: "Day 7: Deployment Is Not The End"
 date: 2026-06-19
 description: "Learn how model serving, monitoring, drift detection, and retraining complete the MLOps lifecycle after deployment."
 tags: ["7-days-of-mlops"]
+series: "7 Days of MLOps"
 ---
 Yesterday I learned why feature stores exist.
 

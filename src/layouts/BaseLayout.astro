@@ -1,0 +1,155 @@
+---
+import '@/styles/global.css';
+import { siteConfig } from '@/config/site';
+import { url } from '@/lib/utils';
+import { pageTitle, absoluteUrl, websiteSchema, type SeoProps } from '@/lib/seo';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import Starfield from '@/components/layout/Starfield.astro';
+
+interface Props extends SeoProps {
+  /** Extra JSON-LD schema objects for this page */
+  jsonLd?: Record<string, unknown>[];
+}
+
+const {
+  title,
+  description = siteConfig.description,
+  image = '/images/og.jpg',
+  canonical,
+  type = 'website',
+  publishedAt,
+  updatedAt,
+  noindex = false,
+  jsonLd = [],
+} = Astro.props;
+
+const fullTitle = pageTitle(title);
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
+const ogImage = absoluteUrl(image);
+const schemas = [websiteSchema(), ...jsonLd];
+const { analytics, features, colorScheme } = siteConfig;
+
+// Google Analytics bootstrap, rendered verbatim (gtag.js needs the `arguments` object).
+const gaSnippet = analytics.googleAnalyticsId
+  ? `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${analytics.googleAnalyticsId}');`
+  : null;
+---
+
+<!doctype html>
+<html lang="en" data-halftone={features.halftone || undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={siteConfig.author.name} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} sizes="any" />
+    <link rel="icon" type="image/png" href={url('/images/favicon-32x32.png')} sizes="32x32" />
+    <link rel="apple-touch-icon" href={url('/images/apple-touch-icon.png')} />
+    <link rel="manifest" href={url('/site.webmanifest')} />
+    <link rel="sitemap" href={url('/sitemap-index.xml')} />
+    {
+      features.posts && (
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={siteConfig.title}
+          href={absoluteUrl('/rss.xml')}
+        />
+      )
+    }
+
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+
+    {/* Open Graph */}
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={siteConfig.title} />
+    <meta property="og:locale" content={siteConfig.locale} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    {publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}
+    {updatedAt && <meta property="article:modified_time" content={updatedAt.toISOString()} />}
+
+    {/* Twitter / X */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {
+      schemas.map((schema) => (
+        <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+      ))
+    }
+
+    {/* Set the colour scheme before first paint to avoid a flash. */}
+    <script is:inline define:vars={{ colorScheme }}>
+      (() => {
+        let stored = null;
+        try {
+          stored = localStorage.getItem('theme');
+        } catch {
+          /* storage unavailable */
+        }
+        const dark = stored
+          ? stored === 'dark'
+          : colorScheme === 'system'
+            ? matchMedia('(prefers-color-scheme: dark)').matches
+            : colorScheme === 'dark';
+        document.documentElement.classList.toggle('dark', dark);
+      })();
+    </script>
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:border focus:border-border focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium"
+    >
+      Skip to content
+    </a>
+
+    {features.starfield && <Starfield />}
+
+    <div class="relative z-[1] flex min-h-dvh flex-col">
+      <Header />
+
+      <main id="main-content" class="flex-1">
+        <slot />
+      </main>
+
+      {features.footer && <Footer />}
+    </div>
+
+    {
+      analytics.cloudflareToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: analytics.cloudflareToken })}
+        />
+      )
+    }
+    {
+      analytics.googleAnalyticsId && (
+        <script
+          is:inline
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${analytics.googleAnalyticsId}`}
+        />
+      )
+    }
+    {gaSnippet && <script is:inline set:html={gaSnippet} />}
+  </body>
+</html>

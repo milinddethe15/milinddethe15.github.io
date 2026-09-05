@@ -1,0 +1,50 @@
+---
+/**
+ * "See also in <series>" — every post that shares the current post's series,
+ * in reading order, with the current one marked.
+ */
+import type { Post } from '@/lib/content';
+import { url } from '@/lib/utils';
+
+interface Props {
+  series: string;
+  posts: Post[];
+  current: Post;
+}
+
+const { series, posts, current } = Astro.props;
+---
+
+{
+  posts.length > 1 && (
+    <section
+      class="mt-12 border border-border bg-surface/70 p-5"
+      aria-label={`Posts in the series ${series}`}
+    >
+      <h2 class="font-heading text-sm tracking-[0.08em] lowercase">
+        See also in <span class="opacity-70">{series}</span>
+      </h2>
+      <ol class="mt-3 space-y-1.5 text-[0.9375rem]">
+        {posts.map((post, i) => {
+          const isCurrent = post.id === current.id;
+          return (
+            <li class="flex gap-3">
+              <span class="w-5 shrink-0 text-right font-mono text-xs opacity-50 tabular-nums">
+                {i + 1}.
+              </span>
+              {isCurrent ? (
+                <span aria-current="page" class="font-medium">
+                  {post.data.title}
+                </span>
+              ) : (
+                <a href={post.data.externalLink ?? url(`/posts/${post.id}`)} class="link-dotted">
+                  {post.data.title}
+                </a>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  )
+}

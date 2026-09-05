@@ -1,0 +1,40 @@
+---
+/**
+ * Callout for Markdown/MDX content — the successor of the Hugo `notice` shortcode.
+ *
+ * ```mdx
+ * <Callout type="tip" title="Pro tip">Content here</Callout>
+ * ```
+ */
+import { cn } from '@/lib/utils';
+
+interface Props {
+  type?: 'note' | 'tip' | 'warning' | 'danger';
+  title?: string;
+}
+
+const { type = 'note', title } = Astro.props;
+
+const config = {
+  note: { label: 'Note', classes: 'border-l-foreground' },
+  tip: { label: 'Tip', classes: 'border-l-foreground/50 border-l-dashed' },
+  warning: { label: 'Warning', classes: 'border-l-amber-500' },
+  danger: { label: 'Danger', classes: 'border-l-red-500' },
+}[type];
+---
+
+<aside
+  class={cn(
+    'not-prose my-6 border border-l-4 bg-surface/80 px-4 py-3 text-[0.9375rem] leading-relaxed',
+    config.classes,
+  )}
+>
+  <p class="mb-1 text-xs font-semibold tracking-[0.18em] uppercase opacity-70">
+    {title ?? config.label}
+  </p>
+  <div
+    class="[&_a]:link-dotted [&_code]:rounded [&_code]:border [&_code]:bg-background [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em]"
+  >
+    <slot />
+  </div>
+</aside>

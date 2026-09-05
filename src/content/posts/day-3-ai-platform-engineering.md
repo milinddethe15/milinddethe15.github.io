@@ -3,6 +3,7 @@ title: "Day 3: Why GPU Sharing Is Hard"
 date: 2026-06-06
 description: "Why GPU utilization is hard: resource fragmentation, sharing strategies (MIG, time-slicing, batching), and cost impacts."
 tags: ["7-days-of-ai-platform-engineering"]
+series: "7 Days of AI Platform Engineering"
 ---
 In Day 2, I learned how Kubernetes discovers GPUs using Device Plugins.
 

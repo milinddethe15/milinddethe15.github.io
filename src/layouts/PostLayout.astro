@@ -1,0 +1,169 @@
+---
+import type { MarkdownHeading } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import { siteConfig } from '@/config/site';
+import type { Post } from '@/lib/content';
+import { formatDate, isoDate, readingTimeMinutes, url } from '@/lib/utils';
+import { articleSchema, breadcrumbSchema, absoluteUrl } from '@/lib/seo';
+import TagBadge from '@/components/posts/TagBadge.astro';
+import TableOfContents from '@/components/posts/TableOfContents.astro';
+import SeriesNav from '@/components/posts/SeriesNav.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  post: Post;
+  headings: MarkdownHeading[];
+  prev: Post | null;
+  next: Post | null;
+  seriesPosts: Post[];
+}
+
+const { post, headings, prev, next, seriesPosts } = Astro.props;
+const { data } = post;
+const minutes = readingTimeMinutes(post.body);
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? siteConfig.url).toString();
+
+const jsonLd = [
+  articleSchema({
+    title: data.title,
+    description: data.description,
+    url: canonicalUrl,
+    image: data.image,
+    publishedAt: data.date,
+    updatedAt: data.updated,
+    tags: data.tags,
+  }),
+  breadcrumbSchema([
+    { name: 'Home', url: absoluteUrl('/') },
+    { name: 'Posts', url: absoluteUrl('/posts') },
+    { name: data.title, url: canonicalUrl },
+  ]),
+];
+
+const navCardClass =
+  'group flex flex-col gap-1.5 border border-border bg-surface/70 p-4 transition-colors hover:border-foreground/60';
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description || undefined}
+  image={data.image}
+  type="article"
+  publishedAt={data.date}
+  updatedAt={data.updated}
+  jsonLd={jsonLd}
+>
+  <div class="container-page py-10 sm:py-14">
+    <div class="relative">
+      <header>
+        <h1 class="text-2xl text-balance sm:text-3xl">{data.title}</h1>
+
+        <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm opacity-60">
+          <span class="inline-flex items-center gap-1.5">
+            <Icon name="calendar" size={14} />
+            <time datetime={isoDate(data.date)}>{formatDate(data.date)}</time>
+          </span>
+          <span class="inline-flex items-center gap-1.5">
+            <Icon name="clock" size={14} />
+            {minutes}-minute read
+          </span>
+          {
+            data.updated && (
+              <span class="inline-flex items-center gap-1.5">
+                updated <time datetime={isoDate(data.updated)}>{formatDate(data.updated)}</time>
+              </span>
+            )
+          }
+        </div>
+
+        {
+          data.tags.length > 0 && (
+            <div class="mt-4 flex flex-wrap gap-1.5">
+              {data.tags.map((tag) => (
+                <TagBadge tag={tag} />
+              ))}
+            </div>
+          )
+        }
+      </header>
+
+      {
+        data.image && (
+          <img
+            src={url(data.image)}
+            alt=""
+            width="1400"
+            height="740"
+            fetchpriority="high"
+            decoding="async"
+            class="mt-8 w-full rounded-md border border-border object-cover"
+          />
+        )
+      }
+
+      <div class="mt-8 xl:hidden">
+        <TableOfContents headings={headings} variant="mobile" />
+      </div>
+
+      <article class="prose mt-8">
+        <slot />
+      </article>
+
+      <footer>
+        {data.series && <SeriesNav series={data.series} posts={seriesPosts} current={post} />}
+
+        {
+          (prev || next) && (
+            <nav class="mt-10 grid gap-4 sm:grid-cols-2" aria-label="Post navigation">
+              {prev ? (
+                <a href={url(`/posts/${prev.id}`)} rel="prev" class={navCardClass}>
+                  <span class="flex items-center gap-1 text-xs lowercase tracking-wide opacity-60">
+                    <Icon name="arrow-left" size={12} />
+                    Older
+                  </span>
+                  <span class="text-sm font-medium transition-opacity group-hover:opacity-70">
+                    {prev.data.title}
+                  </span>
+                </a>
+              ) : (
+                <span />
+              )}
+              {next && (
+                <a
+                  href={url(`/posts/${next.id}`)}
+                  rel="next"
+                  class:list={[navCardClass, 'text-right sm:col-start-2']}
+                >
+                  <span class="flex items-center justify-end gap-1 text-xs lowercase tracking-wide opacity-60">
+                    Newer
+                    <Icon name="arrow-right" size={12} />
+                  </span>
+                  <span class="text-sm font-medium transition-opacity group-hover:opacity-70">
+                    {next.data.title}
+                  </span>
+                </a>
+              )}
+            </nav>
+          )
+        }
+
+        <div class="mt-10 border-t border-border pt-6">
+          <a
+            href={url('/posts')}
+            class="inline-flex items-center gap-1.5 text-xs font-medium lowercase tracking-wide opacity-60 transition-opacity hover:opacity-100"
+          >
+            <Icon name="arrow-left" size={13} />
+            All posts
+          </a>
+        </div>
+      </footer>
+
+      {/* Desktop TOC — floats to the right of the content column on wide screens */}
+      <aside class="absolute top-0 left-full ml-10 hidden h-full w-52 xl:block">
+        <div class="sticky top-24">
+          <TableOfContents headings={headings} variant="sidebar" />
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

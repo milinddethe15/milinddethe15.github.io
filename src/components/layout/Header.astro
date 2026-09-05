@@ -1,0 +1,59 @@
+---
+import { siteConfig } from '@/config/site';
+import { url, isExternal } from '@/lib/utils';
+import ThemeToggle from './ThemeToggle.astro';
+import MobileNav from './MobileNav.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+function isActive(href: string): boolean {
+  if (isExternal(href)) return false;
+  const target = url(href).replace(/\/$/, '') || '/';
+  if (href === '/') return pathname === target;
+  return pathname === target || pathname.startsWith(`${target}/`);
+}
+---
+
+<header class="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
+  <div class="container-page flex h-14 items-center justify-between gap-4">
+    <a
+      href={url('/')}
+      class="font-heading text-[0.9375rem] tracking-[0.1em] whitespace-nowrap uppercase transition-opacity hover:opacity-70"
+    >
+      {siteConfig.name}
+    </a>
+
+    <div class="flex items-center gap-1">
+      <nav class="mr-2 hidden items-center gap-5 md:flex" aria-label="Main navigation">
+        {
+          siteConfig.navigation.map((item) => (
+            <a
+              href={url(item.href)}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class="nav-link text-sm"
+              {...(isExternal(item.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+      {
+        siteConfig.theme.purchaseUrl && (
+          <a
+            href={siteConfig.theme.purchaseUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mr-1 ml-2 hidden h-8 items-center gap-1.5 rounded-full border border-foreground bg-foreground px-3.5 text-xs font-semibold tracking-wide text-background transition-opacity hover:opacity-80 md:inline-flex"
+          >
+            {siteConfig.theme.purchaseLabel}
+            <Icon name="arrow-right" size={12} />
+          </a>
+        )
+      }
+      {siteConfig.features.colorSchemeToggle && <ThemeToggle />}
+      <MobileNav />
+    </div>
+  </div>
+</header>

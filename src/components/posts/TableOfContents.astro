@@ -1,0 +1,100 @@
+---
+import type { MarkdownHeading } from 'astro';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  variant?: 'sidebar' | 'mobile';
+}
+
+const { headings, variant = 'sidebar' } = Astro.props;
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+  toc.length > 0 && variant === 'sidebar' && (
+    <nav data-toc aria-label="Table of contents" class="text-[0.8125rem]">
+      <p class="mb-3 font-heading text-[0.6875rem] tracking-[0.1em] lowercase">on this page</p>
+      <ul class="space-y-1.5 border-l border-border">
+        {toc.map((heading) => (
+          <li>
+            <a
+              href={`#${heading.slug}`}
+              class:list={[
+                '-ml-px block border-l border-transparent py-0.5 leading-snug text-muted-foreground transition-colors hover:text-foreground aria-[current=true]:border-foreground aria-[current=true]:text-foreground',
+                heading.depth === 2 ? 'pl-4' : 'pl-7',
+              ]}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+{
+  toc.length > 0 && variant === 'mobile' && (
+    <details class="group border border-border bg-surface/70 xl:hidden">
+      <summary class="flex cursor-pointer items-center justify-between px-4 py-3 text-sm font-medium lowercase tracking-wide select-none">
+        on this page
+        <Icon name="chevron-down" size={16} class="transition-transform group-open:rotate-180" />
+      </summary>
+      <ul class="space-y-1.5 border-t border-border px-4 py-3 text-sm">
+        {toc.map((heading) => (
+          <li>
+            <a
+              href={`#${heading.slug}`}
+              class:list={[
+                'block py-0.5 text-muted-foreground transition-colors hover:text-foreground',
+                heading.depth === 3 && 'pl-4',
+              ]}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </details>
+  )
+}
+
+<script>
+  function initToc() {
+    const tocLinks = document.querySelectorAll<HTMLAnchorElement>('[data-toc] a');
+    if (tocLinks.length === 0) return;
+
+    const headingEls = Array.from(
+      document.querySelectorAll<HTMLElement>('article h2[id], article h3[id]'),
+    );
+    if (headingEls.length === 0) return;
+
+    const linkById = new Map<string, HTMLAnchorElement>();
+    tocLinks.forEach((link) => {
+      linkById.set(decodeURIComponent(link.hash.slice(1)), link);
+    });
+
+    let activeId: string | null = null;
+    function setActive(id: string) {
+      if (id === activeId) return;
+      activeId = id;
+      tocLinks.forEach((link) => link.removeAttribute('aria-current'));
+      linkById.get(id)?.setAttribute('aria-current', 'true');
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+            break;
+          }
+        }
+      },
+      { rootMargin: '-72px 0px -75% 0px', threshold: 0 },
+    );
+    headingEls.forEach((el) => observer.observe(el));
+  }
+  initToc();
+</script>

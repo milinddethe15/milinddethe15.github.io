@@ -3,6 +3,7 @@ title: "Day 2: From Notebook to Reproducible Training"
 date: 2026-06-14
 description: "Learn why Jupyter notebooks are great for experimentation but insufficient for reproducible machine learning workflows."
 tags: ["7-days-of-mlops"]
+series: "7 Days of MLOps"
 ---
 [Yesterday](/posts/mlops/day1/) I learned why DevOps alone is not enough for machine learning.
 

@@ -1,0 +1,49 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  /** Text copied to the clipboard on click */
+  text: string;
+  label?: string;
+  class?: string;
+}
+
+const { text, label = 'Copy to clipboard', class: className } = Astro.props;
+---
+
+<button
+  type="button"
+  data-copy-text={text}
+  aria-label={label}
+  title={label}
+  class:list={[
+    'inline-flex size-7 cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground',
+    className,
+  ]}
+>
+  <Icon name="copy" size={14} class="copy-icon" />
+  <Icon name="check" size={14} class="check-icon hidden" />
+</button>
+
+<script>
+  function initCopyButtons() {
+    document.querySelectorAll<HTMLButtonElement>('[data-copy-text]').forEach((btn) => {
+      if (btn.dataset.ready) return;
+      btn.dataset.ready = 'true';
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(btn.dataset.copyText ?? '');
+          btn.querySelector('.copy-icon')?.classList.add('hidden');
+          btn.querySelector('.check-icon')?.classList.remove('hidden');
+          setTimeout(() => {
+            btn.querySelector('.copy-icon')?.classList.remove('hidden');
+            btn.querySelector('.check-icon')?.classList.add('hidden');
+          }, 1600);
+        } catch {
+          /* clipboard unavailable */
+        }
+      });
+    });
+  }
+  initCopyButtons();
+</script>

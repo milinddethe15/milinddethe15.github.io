@@ -3,6 +3,7 @@ title: "Day 6: Why vLLM Exists"
 date: 2026-06-09
 description: "Why vLLM exists: batching, PagedAttention, and efficient GPU memory management for LLM serving."
 tags: ["7-days-of-ai-platform-engineering"]
+series: "7 Days of AI Platform Engineering"
 ---
 Over the last few days, I've learned how AI platforms manage GPUs:
 

@@ -1,0 +1,89 @@
+---
+/**
+ * Accessible tabs for MDX content — the successor of the Hugo `tabgroup` shortcode.
+ *
+ * ```mdx
+ * <Tabs tabs={['npm', 'pnpm']}>
+ *   <div>npm install astro</div>
+ *   <div>pnpm add astro</div>
+ * </Tabs>
+ * ```
+ * Children are matched to tab labels by order.
+ */
+interface Props {
+  tabs: string[];
+}
+
+const { tabs } = Astro.props;
+const id = `tabs-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="not-prose tabs my-6 border border-border" data-tabs={id}>
+  <div
+    role="tablist"
+    aria-label="Options"
+    class="flex gap-1 border-b border-border bg-surface px-2 pt-2"
+  >
+    {
+      tabs.map((tab, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`${id}-tab-${i}`}
+          aria-controls={`${id}-panel-${i}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? 0 : -1}
+          class="cursor-pointer border-b-2 border-transparent px-3 py-1.5 text-xs font-medium lowercase tracking-wide text-muted-foreground transition-colors aria-selected:border-foreground aria-selected:text-foreground hover:text-foreground"
+        >
+          {tab}
+        </button>
+      ))
+    }
+  </div>
+  <div
+    class="tabs-panels p-4 text-[0.9375rem] [&>:not([hidden])]:block [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5"
+  >
+    <slot />
+  </div>
+</div>
+
+<script>
+  function initTabs() {
+    document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((root) => {
+      if (root.dataset.tabsReady) return;
+      root.dataset.tabsReady = 'true';
+
+      const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+      const panels = Array.from(
+        root.querySelector('.tabs-panels')?.children ?? [],
+      ) as HTMLElement[];
+
+      panels.forEach((panel, i) => {
+        panel.id = `${root.dataset.tabs}-panel-${i}`;
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('aria-labelledby', `${root.dataset.tabs}-tab-${i}`);
+        panel.hidden = i !== 0;
+      });
+
+      function select(index: number) {
+        tabs.forEach((tab, i) => {
+          tab.setAttribute('aria-selected', String(i === index));
+          tab.tabIndex = i === index ? 0 : -1;
+        });
+        panels.forEach((panel, i) => {
+          panel.hidden = i !== index;
+        });
+        tabs[index]?.focus();
+      }
+
+      tabs.forEach((tab, i) => {
+        tab.addEventListener('click', () => select(i));
+        tab.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight') select((i + 1) % tabs.length);
+          if (e.key === 'ArrowLeft') select((i - 1 + tabs.length) % tabs.length);
+        });
+      });
+    });
+  }
+  initTabs();
+</script>

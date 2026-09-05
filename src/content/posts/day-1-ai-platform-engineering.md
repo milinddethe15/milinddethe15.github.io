@@ -3,6 +3,7 @@ title: "Day 1: Why AI Workloads Are Different from Traditional Applications"
 date: 2026-06-04
 description: "Why AI workloads demand different platform engineering: GPUs change bottlenecks and resource priorities."
 tags: ["7-days-of-ai-platform-engineering"]
+series: "7 Days of AI Platform Engineering"
 ---
 As someone who has spent most of my time with Kubernetes, observability, and platform engineering, I started my AI Platform Engineering journey with a simple question:
 

@@ -3,6 +3,7 @@ title: "Day 4: Why AI Needs Different Scheduling"
 date: 2026-06-07
 description: "Why AI scheduling differs from traditional apps: gang scheduling, topology awareness, and specialized schedulers."
 tags: ["7-days-of-ai-platform-engineering"]
+series: "7 Days of AI Platform Engineering"
 ---
 In Day 3, I learned that GPU utilization is one of the biggest challenges in AI infrastructure.
 

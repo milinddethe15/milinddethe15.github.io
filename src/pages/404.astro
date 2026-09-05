@@ -1,20 +1,23 @@
 ---
-import Base from '../layouts/Base.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { url } from '@/lib/utils';
 ---
 
-<Base title="404 · @milinddethe15" description="Page not found." noindex>
-  <div class="container narrow" style="padding-block: 96px 160px;">
-    <p class="kicker">HTTP 404</p>
-    <h1 style="font-size: 2.1rem; font-weight: 700; letter-spacing: -0.02em; margin-top: 10px;">
-      Page not found
-    </h1>
-    <p style="color: var(--text-dim); margin-top: 12px; max-width: 52ch;">
-      This pod has been evicted. Let's reschedule you somewhere healthy.
+<BaseLayout title="404 — Page not found" description="This page could not be found." noindex>
+  <div
+    class="container-page flex min-h-[calc(100dvh-14rem)] flex-col items-center justify-center py-20 text-center"
+  >
+    <h1 class="text-[clamp(4rem,14vw,7rem)] leading-none">404</h1>
+    <h2 class="mt-4 font-sans text-xl font-medium tracking-normal opacity-80">Page not found</h2>
+    <p class="mt-3 text-base opacity-70">
+      Sorry, this page does not exist.<br />
+      You can head back to <a href={url('/')} class="link-dotted">the homepage</a>.
     </p>
-    <p class="intro__links">
-      <a href="/">← back home</a>
-      <span>·</span>
-      <a href="/posts/">read posts</a>
-    </p>
+    <p class="mt-6 font-mono text-xs opacity-40" id="requested-path"></p>
   </div>
-</Base>
+</BaseLayout>
+
+<script>
+  const el = document.getElementById('requested-path');
+  if (el) el.textContent = location.pathname;
+</script>

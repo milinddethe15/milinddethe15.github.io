@@ -3,6 +3,7 @@ title: "Day 2: How Kubernetes Sees GPUs"
 date: 2026-06-05
 description: "How Kubernetes discovers GPUs: drivers, device plugins, and making GPUs schedulable resources."
 tags: ["7-days-of-ai-platform-engineering"]
+series: "7 Days of AI Platform Engineering"
 ---
 Yesterday I learned that AI infrastructure is fundamentally about managing expensive compute resources.
 

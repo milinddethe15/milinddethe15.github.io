@@ -3,6 +3,7 @@ title: "Day 5: When Does a Training Script Become a Pipeline?"
 date: 2026-06-17
 description: "Learn why machine learning workflows evolve from Python scripts into pipelines and how Kubeflow Pipelines orchestrates reproducible ML workflows on Kubernetes."
 tags: ["7-days-of-mlops"]
+series: "7 Days of MLOps"
 ---
 Yesterday I learned how machine learning teams improve models through hyperparameter tuning, AutoML, and large-scale experimentation.
 

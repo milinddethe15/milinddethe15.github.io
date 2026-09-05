@@ -1,0 +1,47 @@
+---
+import type { Post } from '@/lib/content';
+import { formatDate, isoDate, url, slugify } from '@/lib/utils';
+import { siteConfig } from '@/config/site';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const href = post.data.externalLink ?? url(`/posts/${post.id}`);
+const external = Boolean(post.data.externalLink);
+---
+
+<li class="border-b border-dashed border-border py-4 last:border-b-0">
+  <a
+    href={href}
+    class="block text-lg leading-snug font-medium tracking-[0.01em] text-balance transition-opacity hover:opacity-60 sm:text-xl"
+    {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+  >
+    {post.data.title}
+  </a>
+  <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.8125rem]">
+    <time datetime={isoDate(post.data.date)} class="whitespace-nowrap opacity-50">
+      {formatDate(post.data.date)}
+    </time>
+    {
+      post.data.tags.map((tag) => (
+        <>
+          <span class="opacity-30" aria-hidden="true">
+            ·
+          </span>
+          {siteConfig.features.tags ? (
+            <a
+              href={url(`/tags/${slugify(tag)}`)}
+              class="text-xs opacity-50 transition-opacity hover:opacity-100"
+            >
+              {tag}
+            </a>
+          ) : (
+            <span class="text-xs opacity-50">{tag}</span>
+          )}
+        </>
+      ))
+    }
+  </div>
+</li>

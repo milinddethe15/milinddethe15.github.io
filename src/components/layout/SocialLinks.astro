@@ -1,0 +1,45 @@
+---
+import { siteConfig } from '@/config/site';
+import { url } from '@/lib/utils';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  class?: string;
+  size?: number;
+  /** Include an RSS icon */
+  withRss?: boolean;
+}
+
+const { class: className, size = 22, withRss = false } = Astro.props;
+const linkClass =
+  'inline-flex size-10 items-center justify-center text-foreground opacity-60 transition-[opacity,transform] hover:-translate-y-0.5 hover:opacity-100 focus-visible:opacity-100';
+---
+
+<ul class:list={['flex items-center justify-center gap-1', className]}>
+  {
+    siteConfig.social.map((link) => (
+      <li>
+        <a
+          href={link.href}
+          aria-label={link.name}
+          title={link.name}
+          class={linkClass}
+          {...(link.href.startsWith('mailto:')
+            ? {}
+            : { target: '_blank', rel: 'me noopener noreferrer' })}
+        >
+          <Icon name={link.icon} size={size} />
+        </a>
+      </li>
+    ))
+  }
+  {
+    withRss && (
+      <li>
+        <a href={url('/rss.xml')} aria-label="RSS feed" title="RSS feed" class={linkClass}>
+          <Icon name="rss" size={size} />
+        </a>
+      </li>
+    )
+  }
+</ul>
