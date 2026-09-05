@@ -106,6 +106,18 @@ const hasSectionsBelow = posts.length > 0 || projects.length > 0 || EXPERIENCE.l
     }
 
     {
+      posts.length > 0 && (
+        <Section title="latest posts" href="/posts">
+          <ul>
+            {posts.map((post) => (
+              <PostRow post={post} />
+            ))}
+          </ul>
+        </Section>
+      )
+    }
+
+    {
       projects.length > 0 && (
         <Section title="selected projects" href="/projects">
           <div class="grid gap-5 sm:grid-cols-2">
@@ -133,18 +145,6 @@ const hasSectionsBelow = posts.length > 0 || projects.length > 0 || EXPERIENCE.l
                   <span class="font-mono text-xs opacity-50">{pr.repo}</span>
                 </a>
               </li>
-            ))}
-          </ul>
-        </Section>
-      )
-    }
-
-    {
-      posts.length > 0 && (
-        <Section title="latest posts" href="/posts">
-          <ul>
-            {posts.map((post) => (
-              <PostRow post={post} />
             ))}
           </ul>
         </Section>
