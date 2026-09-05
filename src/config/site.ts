@@ -156,6 +156,7 @@ export const siteConfig: SiteConfig = {
       '[IIT KGP](https://www.iitkgp.ac.in/) graduate',
       'Ex-[Atlan](https://atlan.com) intern',
       '[LFX Thanos](https://mentorship.lfx.linuxfoundation.org/project/541a5bb5-09fd-47a9-a244-a65386aa7f7c) contributor',
+      '[Kubeflow](https://github.com/kubeflow) member',
       '[CKA](https://www.credly.com/badges/0d4feb0b-18d7-4cca-860c-7c8259a11084/public_url) certified',
     ],
   },
