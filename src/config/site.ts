@@ -151,12 +151,12 @@ export const siteConfig: SiteConfig = {
     name: 'Milind Dethe',
     email: 'milinddethe15@gmail.com',
     avatar: '/images/dp.jpg',
-    tagline: 'Building, breaking, and automating things in tech.',
+    tagline: 'Software engineer',
     info: [
-      '[IIT KGP](https://www.iitkgp.ac.in/) ’26',
-      'Ex-[Atlan](https://atlan.com)',
-      '[LFX ’24 Thanos](https://mentorship.lfx.linuxfoundation.org/project/541a5bb5-09fd-47a9-a244-a65386aa7f7c)',
-      '[CKA](https://www.credly.com/badges/0d4feb0b-18d7-4cca-860c-7c8259a11084/public_url) Certified',
+      '[IIT KGP](https://www.iitkgp.ac.in/) graduate',
+      'Ex-[Atlan](https://atlan.com) intern',
+      '[LFX Thanos](https://mentorship.lfx.linuxfoundation.org/project/541a5bb5-09fd-47a9-a244-a65386aa7f7c) contributor',
+      '[CKA](https://www.credly.com/badges/0d4feb0b-18d7-4cca-860c-7c8259a11084/public_url) certified',
     ],
   },
 
