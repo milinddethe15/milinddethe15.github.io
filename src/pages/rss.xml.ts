@@ -12,7 +12,8 @@ export async function GET(_context: APIContext) {
     title: siteConfig.title,
     description: siteConfig.description,
     site: absoluteUrl('/'),
-    trailingSlash: false,
+    // Match the site's canonical form, or every feed link costs a 308.
+    trailingSlash: true,
     items: posts.map((post) => ({
       title: post.data.title,
       description: post.data.description,

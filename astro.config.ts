@@ -21,7 +21,9 @@ const monoStack = "ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mo
 export default defineConfig({
   site,
   base,
-  trailingSlash: 'never',
+  // Cloudflare Pages serves Astro's directory output at '/posts/', and the
+  // previous site used that shape too — so slashes are the canonical form.
+  trailingSlash: 'always',
   // Cloudflare Pages handles this server-side too (public/_redirects); the
   // generated page keeps /resume working on any other host.
   redirects: {

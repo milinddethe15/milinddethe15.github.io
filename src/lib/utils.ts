@@ -13,7 +13,21 @@ const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
  */
 export function url(path: string): string {
   if (isExternal(path)) return path;
-  return `${BASE}${path}`;
+  return withTrailingSlash(`${BASE}${path}`);
+}
+
+/**
+ * Append the trailing slash Astro's directory output is served under, so no
+ * internal link pays for a 308. Files (anything whose last segment has an
+ * extension, e.g. /rss.xml) and query/hash suffixes are left untouched.
+ */
+function withTrailingSlash(href: string): string {
+  const mark = href.search(/[?#]/);
+  const pathname = mark === -1 ? href : href.slice(0, mark);
+  const suffix = mark === -1 ? '' : href.slice(mark);
+  if (pathname === '' || pathname.endsWith('/')) return href;
+  if (pathname.slice(pathname.lastIndexOf('/') + 1).includes('.')) return href;
+  return `${pathname}/${suffix}`;
 }
 
 /** True for absolute URLs (http, https, mailto, protocol-relative). */
