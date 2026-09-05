@@ -5,16 +5,15 @@ import { getAllTags } from '@/lib/content';
 import { url } from '@/lib/utils';
 
 const tags = siteConfig.features.tags && siteConfig.features.posts ? await getAllTags() : [];
+// See the note in tags/[tag]/[...page].astro — inline this and the space is lost.
+const topicCount = `${tags.length} ${tags.length === 1 ? 'topic' : 'topics'}`;
 ---
 
 <BaseLayout title="Tags" description="Browse all post topics and tags.">
   <div class="container-page py-10 sm:py-14">
     <header>
       <h1 class="text-2xl sm:text-3xl">Tags</h1>
-      <p class="mt-3 text-base opacity-75">
-        {tags.length}
-        {tags.length === 1 ? 'topic' : 'topics'} across all posts.
-      </p>
+      <p class="mt-3 text-base opacity-75">{topicCount} across all posts.</p>
     </header>
 
     <ul class="mt-8 border-t border-border">
