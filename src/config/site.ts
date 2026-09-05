@@ -151,7 +151,7 @@ export const siteConfig: SiteConfig = {
     name: 'Milind Dethe',
     email: 'milinddethe15@gmail.com',
     avatar: '/images/dp.jpg',
-    tagline: 'Building boring, reliable infrastructure for the cloud-native world.',
+    tagline: 'Building, breaking, and automating things in tech.',
     info: [
       '[IIT KGP](https://www.iitkgp.ac.in/) ’26',
       'Ex-[Atlan](https://atlan.com)',
