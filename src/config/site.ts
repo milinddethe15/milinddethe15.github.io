@@ -142,7 +142,7 @@ export const siteConfig: SiteConfig = {
   name: '@milinddethe15',
   title: '@milinddethe15',
   description:
-    'Platform and DevOps engineer working on Kubernetes, AWS, and cloud-native infrastructure. CKA certified. Ex-Atlan, LFX mentee at CNCF Thanos, Kubeflow contributor.',
+    "Milind Dethe's personal site — posts, projects, and build logs from the things I build, break, and automate.",
   url: 'https://milinddethe15.tech',
   locale: 'en_US',
   colorScheme: 'dark',
