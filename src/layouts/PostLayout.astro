@@ -47,7 +47,7 @@ const navCardClass =
 <BaseLayout
   title={data.title}
   description={data.description || undefined}
-  image={data.image}
+  image={data.image ?? null}
   type="article"
   publishedAt={data.date}
   updatedAt={data.updated}

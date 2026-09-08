@@ -26,7 +26,7 @@ const {
 
 const fullTitle = pageTitle(title);
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
-const ogImage = absoluteUrl(image);
+const ogImage = image ? absoluteUrl(image) : null;
 const schemas = [websiteSchema(), ...jsonLd];
 const { analytics, features, colorScheme } = siteConfig;
 
@@ -77,17 +77,23 @@ const gaSnippet = analytics.googleAnalyticsId
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    {
+      ogImage && (
+        <>
+          <meta property="og:image" content={ogImage} />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+        </>
+      )
+    }
     {publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}
     {updatedAt && <meta property="article:modified_time" content={updatedAt.toISOString()} />}
 
     {/* Twitter / X */}
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
 
     {
       schemas.map((schema) => (

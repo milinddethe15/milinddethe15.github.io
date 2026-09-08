@@ -4,8 +4,11 @@ import { url } from './utils';
 export interface SeoProps {
   title?: string;
   description?: string;
-  /** Path or absolute URL for the social image */
-  image?: string;
+  /**
+   * Path or absolute URL for the social image. `undefined` uses the
+   * site-wide card; `null` sends no image so X/Slack show a plain link card.
+   */
+  image?: string | null;
   /** Override canonical URL (defaults to current page) */
   canonical?: string;
   type?: 'website' | 'article';
