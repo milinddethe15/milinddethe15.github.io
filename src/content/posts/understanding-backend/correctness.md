@@ -1,12 +1,12 @@
 ---
 title: "The Database Update Succeeded. The Event Didn't. Now What?"
 date: 2026-09-14
-description: "I saved the order on one line and published the event on the next. Then I killed the process between them, swapped them, and put the publish inside the transaction. Nothing fixed it, until the event became a row."
-tags: ["understanding-backend"]
-series: "#understandingBackend"
+description: 'I saved the order on one line and published the event on the next. Then I killed the process between them, swapped them, and put the publish inside the transaction. Nothing fixed it, until the event became a row.'
+tags: ['understanding-backend']
+series: '#understandingBackend'
 ---
 
-[Post 07](/posts/understanding-backend/TODO-post-07-slug/) ended with a question I didn't have an answer for.
+[Post 07](/posts/understanding-backend/distributed-systems/) ended with a question I didn't have an answer for.
 
 When a request crosses into another service, you can't always know whether it happened.
 
