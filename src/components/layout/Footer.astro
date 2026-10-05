@@ -7,6 +7,7 @@ const { since, text, credit } = siteConfig.footer;
 const themeUrl = 'https://www.paypal.com/ncp/payment/KT2A3TSWWWH9N';
 const range = since && since < year ? `${since} – ${year}` : `${year}`;
 const copyright = `© ${range} ${siteConfig.author.name}`;
+const destroyUrl = `https://destroy.spritefusion.com/?from=badge&url=${encodeURIComponent(siteConfig.url)}`;
 ---
 
 <footer class="mt-24 border-t border-border">
@@ -42,5 +43,23 @@ const copyright = `© ${range} ${siteConfig.author.name}`;
         )
       }
     </p>
+    <a href={destroyUrl} target="_blank" rel="noopener noreferrer" class="mt-2">
+      <img
+        src="https://destroy.spritefusion.com/badge.svg"
+        alt="Destroy this website"
+        width="180"
+        height="40"
+        loading="lazy"
+        class="hidden dark:block"
+      />
+      <img
+        src="https://destroy.spritefusion.com/badge-light.svg"
+        alt="Destroy this website"
+        width="180"
+        height="40"
+        loading="lazy"
+        class="dark:hidden"
+      />
+    </a>
   </div>
 </footer>
